@@ -32,13 +32,13 @@ import static ru.practicum.utils.Templates.POST_ENDPOINT_HIT;
 @RequiredArgsConstructor
 @Slf4j
 public class StatsController {
-    private final String DEFAULT_APP_NAME = "ewm-main-service";
+    private final String defaultAppName = "ewm-main-service";
     private final StatsService statsService;
 
     @GetMapping("/stats")
     public List<ViewStatsDto> getEndpointHitStats(@RequestParam(name = "start") String encodedStart,
                                                   @RequestParam(name = "end") String encodedEnd,
-                                                  @RequestParam(name = "app", defaultValue = DEFAULT_APP_NAME) String app,
+                                                  @RequestParam(name = "app", defaultValue = defaultAppName) String app,
                                                   @RequestParam(name = "uris", required = false) List<String> uris,
                                                   @RequestParam(name = "unique", defaultValue = "false") Boolean unique) {
         LocalDateTime start = parseDate(decode(encodedStart));
