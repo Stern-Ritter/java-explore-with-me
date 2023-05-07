@@ -23,7 +23,7 @@ public class StatsServiceImpl implements StatsService {
     @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<ViewStatsDto> getEndpointHitStats(LocalDateTime start, LocalDateTime end, String app,
                                                   List<String> uris, Boolean unique) {
-        if(unique) {
+        if (unique) {
             return statsRepository.getEndpointHitWithUniqueIpStats(start, end, app, uris);
         }
 
