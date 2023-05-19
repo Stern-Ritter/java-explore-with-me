@@ -31,7 +31,11 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ru.practicum.utils.Templates.*;
@@ -41,9 +45,9 @@ import static ru.practicum.utils.Utils.calculateFirstPageNumber;
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-    private final static int MIN_EVENT_DATE_OFFSET = 2;
-    private final static int ENDPOINT_HIT_MONTHS_OFFSET = 3;
-    private final static boolean COUNT_UNIQUE_IP_ADDRESSES = true;
+    private final int MIN_EVENT_DATE_OFFSET = 2;
+    private final int ENDPOINT_HIT_MONTHS_OFFSET = 3;
+    private final boolean COUNT_UNIQUE_IP_ADDRESSES = true;
 
     private final StatsClient statsClient;
     private final EventRepository eventRepository;
