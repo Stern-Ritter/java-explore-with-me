@@ -1,27 +1,35 @@
 package ru.practicum.client;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.stats.CreateEndpointHitDto;
+import ru.practicum.stats.EndpointHitDto;
+import ru.practicum.stats.ViewStatsDto;
 
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Component
 public class StatsClient extends BaseClient {
     private static final String ENDPOINT_HIT_API_PREFIX = "/hit";
     private static final String STATS_API_PREFIX = "/stats";
 
     @Autowired
-    public StatsClient(String serviceUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${services.stats-service.uri:http://localhost:9090}") String serviceUrl,
+                       RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serviceUrl))
@@ -30,8 +38,8 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> getEndpointHitStats(LocalDateTime start, LocalDateTime end, @Nullable String app,
-                                                      @Nullable List<String> uris, @Nullable Boolean unique) {
+    public List<ViewStatsDto> getEndpointHitStats(LocalDateTime start, LocalDateTime end, @Nullable String app,
+                                                  @Nullable List<String> uris, @Nullable Boolean unique) {
         String encodedStart = encode(parseDate(start));
         String encodedEnd = encode(parseDate(end));
 
@@ -56,8 +64,12 @@ public class StatsClient extends BaseClient {
             parameters.put("unique", unique);
         }
 
+        Gson gson = new Gson();
         String path = sb.toString();
-        return get(path, parameters);
+        ResponseEntity<Object> response = get(path, parameters);
+        String json = gson.toJson(response.getBody());
+        Type listOfViewStatsDtoClass = new TypeToken<ArrayList<ViewStatsDto>>(){}.getType();
+        return gson.fromJson(json, listOfViewStatsDtoClass);
     }
 
     public ResponseEntity<Object> addEndpointHit(CreateEndpointHitDto endpointHitDto) {

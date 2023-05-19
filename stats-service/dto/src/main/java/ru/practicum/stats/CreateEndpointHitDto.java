@@ -32,6 +32,6 @@ public class CreateEndpointHitDto {
     private String ip;
 
     @NotNull(message = ENDPOINT_HIT_REQUESTED_DATE_VALIDATION_EXCEPTION)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
 }
