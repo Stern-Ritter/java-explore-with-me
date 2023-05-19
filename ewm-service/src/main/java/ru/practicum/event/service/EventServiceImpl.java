@@ -45,9 +45,9 @@ import static ru.practicum.utils.Utils.calculateFirstPageNumber;
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-    private final int MIN_EVENT_DATE_OFFSET = 2;
-    private final int ENDPOINT_HIT_MONTHS_OFFSET = 3;
-    private final boolean COUNT_UNIQUE_IP_ADDRESSES = true;
+    private final int minEventDateOffset = 2;
+    private final int endpointHitMonthsOffset = 3;
+    private final boolean countUniqueIpAddresses = true;
 
     private final StatsClient statsClient;
     private final EventRepository eventRepository;
@@ -62,7 +62,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException(String.format(EVENT_NOT_EXISTS_TEMPLATE, eventId)));
 
         EventFullDto event = EventMapper.toEventFullDto(savedEvent);
-        addViewsCount(event, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(event, countUniqueIpAddresses);
         return event;
     }
 
@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
             events = events.stream().sorted(Comparator.comparingLong(EventFullDto::getViews)).collect(Collectors.toList());
         }
 
-        addViewsCount(events, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(events, countUniqueIpAddresses);
         return events;
     }
 
@@ -96,7 +96,7 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());
 
-        addViewsCount(events, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(events, countUniqueIpAddresses);
         return events;
     }
 
@@ -109,7 +109,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException(String.format(EVENT_NOT_EXISTS_TEMPLATE, eventId)));
 
         EventFullDto event = EventMapper.toEventFullDto(savedEvent);
-        addViewsCount(event, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(event, countUniqueIpAddresses);
         return event;
     }
 
@@ -124,7 +124,7 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
 
-        addViewsCount(events, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(events, countUniqueIpAddresses);
         return events;
     }
 
@@ -154,7 +154,7 @@ public class EventServiceImpl implements EventService {
         createdItem.setState(EventState.PENDING);
 
         EventFullDto event = EventMapper.toEventFullDto(eventRepository.save(createdItem));
-        addViewsCount(event, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(event, countUniqueIpAddresses);
         return event;
     }
 
@@ -182,7 +182,7 @@ public class EventServiceImpl implements EventService {
         }
 
         EventFullDto event = EventMapper.toEventFullDto(eventRepository.save(mergedEvent));
-        addViewsCount(event, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(event, countUniqueIpAddresses);
         return event;
     }
 
@@ -206,7 +206,7 @@ public class EventServiceImpl implements EventService {
         validateEventDate(mergedEvent.getEventDate());
 
         EventFullDto event = EventMapper.toEventFullDto(eventRepository.save(mergedEvent));
-        addViewsCount(event, COUNT_UNIQUE_IP_ADDRESSES);
+        addViewsCount(event, countUniqueIpAddresses);
         return event;
     }
 
@@ -284,8 +284,8 @@ public class EventServiceImpl implements EventService {
 
     private void validateEventDate(LocalDateTime eventDate) {
         LocalDateTime currentDate = LocalDateTime.now();
-        if (eventDate.isBefore(currentDate.plusHours(MIN_EVENT_DATE_OFFSET))) {
-            throw new ForbiddenException(String.format(EVENT_EVENT_DATE_VALIDATION_EXCEPTION, MIN_EVENT_DATE_OFFSET));
+        if (eventDate.isBefore(currentDate.plusHours(minEventDateOffset))) {
+            throw new ForbiddenException(String.format(EVENT_EVENT_DATE_VALIDATION_EXCEPTION, minEventDateOffset));
         }
     }
 
@@ -310,7 +310,7 @@ public class EventServiceImpl implements EventService {
 
     private void addViewsCount(EventDto event, boolean unique) {
         LocalDateTime end = LocalDateTime.now();
-        LocalDateTime start = end.minusYears(ENDPOINT_HIT_MONTHS_OFFSET);
+        LocalDateTime start = end.minusYears(endpointHitMonthsOffset);
         List<String> uris = List.of(String.format("/events/%d", event.getId()));
         List<ViewStatsDto> viewStats = statsClient.getEndpointHitStats(start, end, APPLICATION_NAME, uris, unique);
         event.setViews(viewStats.stream().map(ViewStatsDto::getHits).findFirst().orElseGet(() -> 0L));
@@ -320,7 +320,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, EventDto> eventMap = new HashMap<>();
         events.forEach((event) -> eventMap.put(event.getId(), event));
         LocalDateTime end = LocalDateTime.now();
-        LocalDateTime start = end.minusYears(ENDPOINT_HIT_MONTHS_OFFSET);
+        LocalDateTime start = end.minusYears(endpointHitMonthsOffset);
         List<String> uris = events.stream()
                 .map(EventDto::getId).map((id) -> String.format("/events/%d", id))
                 .collect(Collectors.toList());
