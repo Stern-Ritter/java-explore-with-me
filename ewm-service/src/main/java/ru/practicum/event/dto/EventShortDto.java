@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class EventShortDto implements EventDto{
+public class EventShortDto implements EventDto {
     private Long id;
 
     private String annotation;

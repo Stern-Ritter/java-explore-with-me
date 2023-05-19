@@ -12,6 +12,7 @@ import java.util.Objects;
 
 public class Utils {
     public static final String APPLICATION_NAME = "ewm-main-service";
+
     public static <T> T coalesce(T first, T second) {
         return first == null ? second : first;
     }

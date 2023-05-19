@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
 import ru.practicum.category.model.Category;
 import ru.practicum.location.model.Location;
 import ru.practicum.request.model.Request;

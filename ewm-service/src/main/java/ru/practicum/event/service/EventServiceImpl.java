@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
@@ -42,15 +41,16 @@ import static ru.practicum.utils.Utils.calculateFirstPageNumber;
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
+    private final static int MIN_EVENT_DATE_OFFSET = 2;
+    private final static int ENDPOINT_HIT_MONTHS_OFFSET = 3;
+    private final static boolean COUNT_UNIQUE_IP_ADDRESSES = true;
+
     private final StatsClient statsClient;
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
     private final Sort.TypedSort<EventFullView> eventSort = Sort.sort(EventFullView.class);
-    private final static int MIN_EVENT_DATE_OFFSET = 2;
-    private final static int ENDPOINT_HIT_MONTHS_OFFSET = 3;
-    private final static boolean COUNT_UNIQUE_IP_ADDRESSES = true;
 
     @Override
     public EventFullDto getById(Long eventId) {
