@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 public class Utils {
     public static final String APPLICATION_NAME = "ewm-main-service";
@@ -33,14 +32,5 @@ public class Utils {
     public static LocalDateTime parseDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return LocalDateTime.parse(date, formatter);
-    }
-
-    public static Throwable findExceptionRootCause(Throwable throwable) {
-        Objects.requireNonNull(throwable);
-        Throwable rootCause = throwable;
-        while (rootCause.getCause() != null && rootCause.getCause() != rootCause) {
-            rootCause = rootCause.getCause();
-        }
-        return rootCause;
     }
 }

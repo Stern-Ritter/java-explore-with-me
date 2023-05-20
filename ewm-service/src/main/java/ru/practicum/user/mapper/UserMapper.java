@@ -5,7 +5,6 @@ import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.model.User;
 import ru.practicum.user.view.UserShortView;
-import ru.practicum.user.view.UserView;
 
 public class UserMapper {
     public static User toUser(CreateUserDto userDto) {
@@ -20,14 +19,6 @@ public class UserMapper {
         userDto.setId(user.getId());
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
-        return userDto;
-    }
-
-    public static UserDto toUserDto(UserView userView) {
-        UserDto userDto = new UserDto();
-        userDto.setId(userView.getId());
-        userDto.setName(userView.getName());
-        userDto.setEmail(userView.getEmail());
         return userDto;
     }
 

@@ -3,6 +3,7 @@ package ru.practicum.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -83,9 +84,19 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleHttpMessageConversionException(final HttpMessageConversionException e) {
+        log.warn(e.getMessage());
+        return new ApiError(
+                HttpStatus.CONFLICT.name(),
+                "For the requested operation the conditions are not met.",
+                e.getMessage(),
+                LocalDateTime.now());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ApiError handleThrowable(final Throwable e) {
-        log.warn(e.getClass().toString());
         log.warn(e.getMessage());
         return new ApiError(
                 INTERNAL_SERVER_ERROR.name(),

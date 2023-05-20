@@ -12,7 +12,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-import static ru.practicum.utils.Templates.*;
+import static ru.practicum.utils.Templates.EVENT_ANNOTATION_LENGTH_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_DESCRIPTION_LENGTH_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_EMPTY_ANNOTATION_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_EMPTY_DESCRIPTION_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_EMPTY_REQUEST_BODY_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_EMPTY_TITLE_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_NULL_CATEGORY_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_NULL_EVENT_DATE_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_NULL_LOCATION_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_TITLE_LENGTH_VALIDATION_EXCEPTION;
 
 @NoArgsConstructor
 @AllArgsConstructor

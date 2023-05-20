@@ -38,7 +38,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ru.practicum.utils.Templates.*;
+import static ru.practicum.utils.Templates.CATEGORY_NOT_EXISTS_TEMPLATE;
+import static ru.practicum.utils.Templates.EVENT_CANCEL_STATE_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_EVENT_DATE_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_NOT_EXISTS_TEMPLATE;
+import static ru.practicum.utils.Templates.EVENT_PUBLISH_STATE_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_REQUEST_CONFIRMATION_INCORRECT_STATUS_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_REQUEST_PARTICIPANT_LIMIT_EXCEPTION;
+import static ru.practicum.utils.Templates.USER_NOT_EXISTS_TEMPLATE;
 import static ru.practicum.utils.Utils.APPLICATION_NAME;
 import static ru.practicum.utils.Utils.calculateFirstPageNumber;
 
@@ -173,7 +180,6 @@ public class EventServiceImpl implements EventService {
         }
 
         validateUpdateByAdminEventState(savedEvent.getState(), patchedItem.getState());
-
         Event mergedEvent = EventMapper.mergePatchedEvent(savedEvent, patchedItem);
         validateEventDate(mergedEvent.getEventDate());
 
@@ -201,7 +207,6 @@ public class EventServiceImpl implements EventService {
         }
 
         validateUpdateByUserEventState(savedEvent.getState());
-
         Event mergedEvent = EventMapper.mergePatchedEvent(savedEvent, patchedItem);
         validateEventDate(mergedEvent.getEventDate());
 

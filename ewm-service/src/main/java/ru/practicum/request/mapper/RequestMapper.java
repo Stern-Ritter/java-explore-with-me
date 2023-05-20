@@ -24,12 +24,4 @@ public class RequestMapper {
         eventRequestDto.setStatus(request.getStatus());
         return eventRequestDto;
     }
-
-    public static Request toRequest(RequestDto requestDto) {
-        Request request = new Request();
-        request.setId(request.getId());
-        request.setCreated(request.getCreated());
-        request.setStatus(request.getStatus());
-        return request;
-    }
 }
