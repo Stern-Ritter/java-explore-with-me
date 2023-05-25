@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,8 +35,8 @@ public class Compilation {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "is_pinned")
-    private Boolean pinned;
+    @Column(name = "is_pinned", nullable = false)
+    private Boolean pinned = false;
 
     @ManyToMany
     @JoinTable(
@@ -43,5 +44,5 @@ public class Compilation {
             joinColumns = @JoinColumn(name = "compilation_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> events;
+    private List<Event> events = new ArrayList<>();
 }

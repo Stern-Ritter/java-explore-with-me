@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS requests (
 CREATE TABLE IF NOT EXISTS compilations (
     id BIGSERIAL,
     title VARCHAR(255) NOT NULL,
-    is_pinned BOOLEAN DEFAULT FALSE,
+    is_pinned BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_compilations PRIMARY KEY (id),
     CONSTRAINT unique_compilation_title UNIQUE (title)
 );

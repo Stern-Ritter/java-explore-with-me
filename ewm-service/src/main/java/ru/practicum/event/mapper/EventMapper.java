@@ -27,9 +27,9 @@ public class EventMapper {
         event.setEventDate(eventDto.getEventDate());
         LocationDto locationDto = eventDto.getLocation();
         event.setLocation(locationDto != null ? LocationMapper.toLocation(locationDto) : null);
-        event.setPaid(eventDto.getPaid());
-        event.setParticipantLimit(eventDto.getParticipantLimit());
-        event.setRequestModeration(eventDto.getRequestModeration());
+        event.setPaid(coalesce(eventDto.getPaid(), event.getPaid()));
+        event.setParticipantLimit(coalesce(eventDto.getParticipantLimit(), event.getParticipantLimit()));
+        event.setRequestModeration(coalesce(eventDto.getRequestModeration(), event.getRequestModeration()));
         event.setTitle(eventDto.getTitle());
         return event;
     }

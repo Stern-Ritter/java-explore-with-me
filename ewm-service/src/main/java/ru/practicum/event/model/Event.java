@@ -57,14 +57,14 @@ public class Event {
     @Column(name = "description", nullable = false, length = 7000)
     private String description;
 
-    @Column(name = "is_paid")
-    private Boolean paid;
+    @Column(name = "is_paid", nullable = false)
+    private Boolean paid = false;
 
-    @Column(name = "is_moderation_required")
-    private Boolean requestModeration;
+    @Column(name = "is_moderation_required", nullable = false)
+    private Boolean requestModeration = true;
 
-    @Column(name = "participant_limit")
-    private Integer participantLimit;
+    @Column(name = "participant_limit", nullable = false)
+    private Integer participantLimit = 0;
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)

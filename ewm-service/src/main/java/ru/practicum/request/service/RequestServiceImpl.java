@@ -2,6 +2,8 @@ package ru.practicum.request.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventState;
 import ru.practicum.event.repository.EventRepository;
@@ -29,6 +31,7 @@ public class RequestServiceImpl implements RequestService {
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<RequestDto> getAllByUserId(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_EXISTS_TEMPLATE, userId)));
@@ -39,6 +42,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public RequestDto create(Long userId, Long eventId) {
         Request request = new Request();
         User user = userRepository.findById(userId)
@@ -49,6 +53,8 @@ public class RequestServiceImpl implements RequestService {
         Long eventInitiatorId = event.getInitiator().getId();
         EventState eventState = event.getState();
         Integer participantLimit = event.getParticipantLimit();
+        boolean isParticipantCountNotLimited = participantLimit == 0;
+        boolean isModerationNotRequested = !event.getRequestModeration();
         Integer requestsCount = event.getRequests().size();
 
         if (Objects.equals(userId, eventInitiatorId)) {
@@ -57,22 +63,23 @@ public class RequestServiceImpl implements RequestService {
         if (eventState != EventState.PUBLISHED) {
             throw new ConflictException(REQUEST_INCORRECT_EVENT_STATUS_EXCEPTION);
         }
-        if (requestsCount.equals(participantLimit)) {
+        if (!isParticipantCountNotLimited && requestsCount.equals(participantLimit)) {
             throw new ConflictException(REQUEST_EVENT_LIMIT_OF_PARTICIPATION_EXCEPTION);
         }
 
         request.setRequester(user);
         request.setEvent(event);
-        if (event.getRequestModeration()) {
-            request.setStatus(RequestStatus.PENDING);
-        } else {
+        if (isParticipantCountNotLimited || isModerationNotRequested) {
             request.setStatus(RequestStatus.CONFIRMED);
+        } else {
+            request.setStatus(RequestStatus.PENDING);
         }
 
         return RequestMapper.toRequestDto(requestRepository.save(request));
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public RequestDto update(Long userId, Long requestId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_EXISTS_TEMPLATE, userId)));

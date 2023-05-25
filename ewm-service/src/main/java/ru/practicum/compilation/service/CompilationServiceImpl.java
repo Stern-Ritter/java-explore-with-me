@@ -5,6 +5,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.CreateCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationDto;
@@ -30,6 +32,7 @@ public class CompilationServiceImpl implements CompilationService {
     private final Sort.TypedSort<CompilationView> compilationSort = Sort.sort(CompilationView.class);
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<CompilationDto> getAll(Boolean pinned, Integer offset, Integer limit) {
         Sort sortByIdAsc = compilationSort.by(CompilationView::getId).ascending();
         Pageable pageable = PageRequest.of(calculateFirstPageNumber(offset, limit), limit, sortByIdAsc);
@@ -39,6 +42,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public CompilationDto getById(Long compilationId) {
         Compilation compilation = compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new NotFoundException(String.format(COMPILATION_NOT_EXISTS_TEMPLATE, compilationId)));
@@ -47,6 +51,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public CompilationDto create(CreateCompilationDto compilationDto) {
         Compilation compilation = CompilationMapper.toCompilation(compilationDto);
 
@@ -60,6 +65,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public CompilationDto update(UpdateCompilationDto compilationDto, Long compilationId) {
         Compilation savedCompilation = compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new NotFoundException(String.format(COMPILATION_NOT_EXISTS_TEMPLATE, compilationId)));
@@ -68,13 +74,16 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = CompilationMapper.mergePatchedCompilation(savedCompilation, patchedCompilation);
 
         List<Long> eventsId = compilationDto.getEvents();
-        List<Event> events = eventRepository.findAllByIdIn(eventsId);
-        compilation.setEvents(events);
+        if (eventsId != null) {
+            List<Event> events = eventRepository.findAllByIdIn(eventsId);
+            compilation.setEvents(events);
+        }
 
         return CompilationMapper.toCompilationDto(compilationRepository.save(compilation));
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void delete(Long compilationId) {
         compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new NotFoundException(String.format(COMPILATION_NOT_EXISTS_TEMPLATE, compilationId)));

@@ -15,7 +15,7 @@ public class CompilationMapper {
     public static Compilation toCompilation(CreateCompilationDto compilationDto) {
         Compilation compilation = new Compilation();
         compilation.setTitle(compilationDto.getTitle());
-        compilation.setPinned(compilationDto.getPinned());
+        compilation.setPinned(coalesce(compilationDto.getPinned(), compilation.getPinned()));
         return compilation;
     }
 

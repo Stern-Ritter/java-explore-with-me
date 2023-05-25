@@ -1,6 +1,6 @@
-package ru.practicum.mapper;
+package ru.practicum.stats.mapper;
 
-import ru.practicum.model.EndpointHit;
+import ru.practicum.stats.model.EndpointHit;
 import ru.practicum.stats.CreateEndpointHitDto;
 import ru.practicum.stats.EndpointHitDto;
 

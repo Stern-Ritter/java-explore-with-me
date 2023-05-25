@@ -4,11 +4,14 @@ public class Templates {
     //Validation
     public static final String USER_EMPTY_REQUEST_BODY_EXCEPTION = "Request body does not contain user data";
     public static final String USER_EMPTY_NAME_VALIDATION_EXCEPTION = "User name should not be empty";
+    public static final String USER_NAME_LENGTH_VALIDATION_EXCEPTION = "User name length should be between 2 and 250 characters";
     public static final String USER_EMPTY_EMAIL_VALIDATION_EXCEPTION = "User email should not be empty";
+    public static final String USER_EMAIL_LENGTH_VALIDATION_EXCEPTION = "User email length should be between 6 and 254 characters";
     public static final String USER_EMAIL_VALIDATION_EXCEPTION = "User email should contain '@' character";
 
     public static final String CATEGORY_EMPTY_REQUEST_BODY_EXCEPTION = "Request body does not contain category data";
     public static final String CATEGORY_NAME_VALIDATION_EXCEPTION = "Category name should not be empty";
+    public static final String CATEGORY_NAME_LENGTH_VALIDATION_EXCEPTION = "Category name length should be between 2 and 50 characters";
 
     public static final String EVENT_EMPTY_REQUEST_BODY_EXCEPTION = "Request body does not contain event data";
     public static final String EVENT_EMPTY_ANNOTATION_VALIDATION_EXCEPTION = "Event annotation should not be empty";
@@ -28,12 +31,14 @@ public class Templates {
 
     public static final String COMPILATION_EMPTY_REQUEST_BODY_EXCEPTION = "Request body does not contain compilation date";
     public static final String COMPILATION_EMPTY_TITLE_VALIDATION_EXCEPTION = "Compilation title should not be empty";
+    public static final String COMPILATION_TITLE_LENGTH_VALIDATION_EXCEPTION = "Compilation title length should be between 2 and 50 characters";
 
     //Exceptions
     public static final String USER_NOT_EXISTS_TEMPLATE = "User with id=%s was not found";
     public static final String CATEGORY_NOT_EXISTS_TEMPLATE = "Category with id=%s was not found";
     public static final String EVENT_NOT_EXISTS_TEMPLATE = "Event with id=%s was not found";
     public static final String EVENT_EVENT_DATE_VALIDATION_EXCEPTION = "Cannot publish the event because event date minimum offset of current time: %s";
+    public static final String EVENT_FILTER_DATES_VALIDATION_TEMPLATE = "The end date should not be earlier than the start date";
     public static final String EVENT_PUBLISH_STATE_VALIDATION_EXCEPTION = "Cannot publish the event because it's not in the right state: %s";
     public static final String EVENT_CANCEL_STATE_VALIDATION_EXCEPTION = "Cannot cancel the event because it's not in the right state: %s";
     public static final String EVENT_REQUEST_PARTICIPANT_LIMIT_EXCEPTION = "The participant limit has been reached";

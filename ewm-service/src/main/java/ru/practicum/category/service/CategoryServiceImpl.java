@@ -5,6 +5,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.CreateCategoryDto;
 import ru.practicum.category.dto.UpdateCategoryDto;
@@ -26,6 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final Sort.TypedSort<Category> categorySort = Sort.sort(Category.class);
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public CategoryDto getById(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(String.format(CATEGORY_NOT_EXISTS_TEMPLATE, categoryId)));
@@ -34,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<CategoryDto> getAll(Integer offset, Integer limit) {
         Sort sortByIdAsc = categorySort.by(Category::getId).ascending();
         Pageable pageable = PageRequest.of(calculateFirstPageNumber(offset, limit), limit, sortByIdAsc);
@@ -44,6 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public CategoryDto create(CreateCategoryDto categoryDto) {
         Category category = CategoryMapper.toCategory(categoryDto);
 
@@ -51,6 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public CategoryDto update(Long categoryId, UpdateCategoryDto categoryDto) {
         Category savedCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(String.format(CATEGORY_NOT_EXISTS_TEMPLATE, categoryId)));
@@ -62,6 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void delete(Long categoryId) {
         categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(String.format(CATEGORY_NOT_EXISTS_TEMPLATE, categoryId)));

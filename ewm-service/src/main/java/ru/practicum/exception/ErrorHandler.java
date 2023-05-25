@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
-
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import java.util.Arrays;
 
 @RestControllerAdvice
 @Slf4j
@@ -31,6 +30,17 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
+        log.warn(e.getMessage());
+        return new ApiError(
+                HttpStatus.BAD_REQUEST.name(),
+                "Incorrectly made request.",
+                e.getMessage(),
+                LocalDateTime.now());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleBadRequestException(final BadRequestException e) {
         log.warn(e.getMessage());
         return new ApiError(
                 HttpStatus.BAD_REQUEST.name(),
@@ -95,11 +105,13 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleThrowable(final Throwable e) {
         log.warn(e.getMessage());
+        System.out.println(e.getClass().toString());
+        System.out.println(Arrays.toString(e.getStackTrace()));
         return new ApiError(
-                INTERNAL_SERVER_ERROR.name(),
+                HttpStatus.INTERNAL_SERVER_ERROR.name(),
                 "An unexpected error has occurred.",
                 e.getMessage(),
                 LocalDateTime.now());

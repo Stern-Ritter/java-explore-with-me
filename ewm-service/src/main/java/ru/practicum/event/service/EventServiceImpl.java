@@ -5,10 +5,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.client.StatsClient;
-import ru.practicum.event.dto.*;
+import ru.practicum.event.dto.CreateEventDto;
+import ru.practicum.event.dto.EventDto;
+import ru.practicum.event.dto.EventFullDto;
+import ru.practicum.event.dto.EventRequestStatusUpdateRequestDto;
+import ru.practicum.event.dto.EventRequestStatusUpdateResultDto;
+import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.event.dto.UpdateEventAdminRequest;
+import ru.practicum.event.dto.UpdateEventUserRequest;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.AdminEventState;
 import ru.practicum.event.model.Event;
@@ -16,6 +25,7 @@ import ru.practicum.event.model.EventSort;
 import ru.practicum.event.model.EventState;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.view.EventFullView;
+import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.ForbiddenException;
 import ru.practicum.exception.NotFoundException;
@@ -31,16 +41,13 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.practicum.utils.Templates.CATEGORY_NOT_EXISTS_TEMPLATE;
 import static ru.practicum.utils.Templates.EVENT_CANCEL_STATE_VALIDATION_EXCEPTION;
 import static ru.practicum.utils.Templates.EVENT_EVENT_DATE_VALIDATION_EXCEPTION;
+import static ru.practicum.utils.Templates.EVENT_FILTER_DATES_VALIDATION_TEMPLATE;
 import static ru.practicum.utils.Templates.EVENT_NOT_EXISTS_TEMPLATE;
 import static ru.practicum.utils.Templates.EVENT_PUBLISH_STATE_VALIDATION_EXCEPTION;
 import static ru.practicum.utils.Templates.EVENT_REQUEST_CONFIRMATION_INCORRECT_STATUS_EXCEPTION;
@@ -64,6 +71,7 @@ public class EventServiceImpl implements EventService {
     private final Sort.TypedSort<EventFullView> eventSort = Sort.sort(EventFullView.class);
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public EventFullDto getById(Long eventId) {
         EventFullView savedEvent = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(() -> new NotFoundException(String.format(EVENT_NOT_EXISTS_TEMPLATE, eventId)));
@@ -74,9 +82,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<EventFullDto> getAllWithFilters(String text, List<Long> categories, Boolean paid,
                                                 LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable,
                                                 EventSort sort, Integer offset, Integer limit) {
+        validateEventFilterDates(rangeStart, rangeEnd);
+
         Sort sortByIdDesc = eventSort.by(EventFullView::getId).ascending();
         Pageable pageable = PageRequest.of(calculateFirstPageNumber(offset, limit), limit, sortByIdDesc);
         List<EventFullDto> events = eventRepository.findAllWithFilters(text, categories, paid, rangeStart, rangeEnd, pageable).stream()
@@ -94,9 +105,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<EventFullDto> getAllWithAdminFilters(List<Long> users, List<EventState> states,
                                                      List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                                      Integer offset, Integer limit) {
+        validateEventFilterDates(rangeStart, rangeEnd);
+
         Sort sortByIdDesc = eventSort.by(EventFullView::getId).ascending();
         Pageable pageable = PageRequest.of(calculateFirstPageNumber(offset, limit), limit, sortByIdDesc);
         List<EventFullDto> events = eventRepository.findAllWithAdminFilters(users, states, categories, rangeStart, rangeEnd, pageable).stream()
@@ -108,6 +122,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public EventFullDto getByEventIdAndUserId(Long eventId, Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_EXISTS_TEMPLATE, userId)));
@@ -121,6 +136,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<EventShortDto> getAllByUserId(Long userId, Integer offset, Integer limit) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_EXISTS_TEMPLATE, userId)));
@@ -136,6 +152,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
     public List<RequestDto> getEventRequestsByEventIdAndUserId(Long eventId, Long userId) {
         List<RequestView> eventRequests = requestRepository.findAllByEventIdAndEventInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_EXISTS_TEMPLATE, userId)));
@@ -146,6 +163,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public EventFullDto create(CreateEventDto eventDto, Long userId) {
         validateEventDate(eventDto.getEventDate());
 
@@ -166,6 +184,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public EventFullDto update(UpdateEventAdminRequest updateEventAdminRequest, Long eventId) {
         Event savedEvent = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(String.format(EVENT_NOT_EXISTS_TEMPLATE, eventId)));
@@ -193,6 +212,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public EventFullDto update(UpdateEventUserRequest updateEventUserRequest, Long userId, Long eventId) {
         Event savedEvent = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(String.format(EVENT_NOT_EXISTS_TEMPLATE, eventId)));
@@ -216,6 +236,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public EventRequestStatusUpdateResultDto updateEventRequestsByEventIdAndUserId(
             EventRequestStatusUpdateRequestDto eventRequestStatusUpdateRequestDto, Long userId, Long eventId) {
         List<Request> confirmedRequests = new ArrayList<>();
@@ -290,7 +311,17 @@ public class EventServiceImpl implements EventService {
     private void validateEventDate(LocalDateTime eventDate) {
         LocalDateTime currentDate = LocalDateTime.now();
         if (eventDate.isBefore(currentDate.plusHours(minEventDateOffset))) {
-            throw new ForbiddenException(String.format(EVENT_EVENT_DATE_VALIDATION_EXCEPTION, minEventDateOffset));
+            throw new BadRequestException(String.format(EVENT_EVENT_DATE_VALIDATION_EXCEPTION, minEventDateOffset));
+        }
+    }
+
+    private boolean isNotNull(Object object) {
+        return object != null;
+    }
+
+    private void validateEventFilterDates(LocalDateTime start, LocalDateTime end) {
+        if (isNotNull(start) && isNotNull(end) && end.isBefore(start)) {
+            throw new BadRequestException(EVENT_FILTER_DATES_VALIDATION_TEMPLATE);
         }
     }
 
@@ -331,6 +362,8 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
         List<ViewStatsDto> viewStats = statsClient.getEndpointHitStats(start, end, APPLICATION_NAME, uris, unique);
         viewStats
+                .stream()
+                .filter((viewStat) -> !viewStat.getUri().equals("/events"))
                 .forEach((viewStat) -> {
                     EventDto event = eventMap.get(Long.parseLong(viewStat.getUri().replace("/events/", "")));
                     event.setViews(viewStat.getHits());
