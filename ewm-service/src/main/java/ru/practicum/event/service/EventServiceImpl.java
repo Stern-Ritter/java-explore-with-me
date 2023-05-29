@@ -44,15 +44,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.practicum.utils.Templates.CATEGORY_NOT_EXISTS_TEMPLATE;
-import static ru.practicum.utils.Templates.EVENT_CANCEL_STATE_VALIDATION_EXCEPTION;
-import static ru.practicum.utils.Templates.EVENT_EVENT_DATE_VALIDATION_EXCEPTION;
-import static ru.practicum.utils.Templates.EVENT_FILTER_DATES_VALIDATION_TEMPLATE;
-import static ru.practicum.utils.Templates.EVENT_NOT_EXISTS_TEMPLATE;
-import static ru.practicum.utils.Templates.EVENT_PUBLISH_STATE_VALIDATION_EXCEPTION;
-import static ru.practicum.utils.Templates.EVENT_REQUEST_CONFIRMATION_INCORRECT_STATUS_EXCEPTION;
-import static ru.practicum.utils.Templates.EVENT_REQUEST_PARTICIPANT_LIMIT_EXCEPTION;
-import static ru.practicum.utils.Templates.USER_NOT_EXISTS_TEMPLATE;
+import static ru.practicum.utils.Templates.*;
 import static ru.practicum.utils.Utils.APPLICATION_NAME;
 import static ru.practicum.utils.Utils.calculateFirstPageNumber;
 
@@ -98,9 +90,15 @@ public class EventServiceImpl implements EventService {
             events = events.stream().sorted(Comparator.comparing(EventFullDto::getEventDate)).collect(Collectors.toList());
         } else if (sort == EventSort.VIEWS) {
             events = events.stream().sorted(Comparator.comparingLong(EventFullDto::getViews)).collect(Collectors.toList());
+        } else if (sort == EventSort.EVENT_RATING) {
+            events = events.stream().sorted(Comparator.comparingInt(EventFullDto::getRating).reversed()).collect(Collectors.toList());
+        } else if (sort == EventSort.EVENT_INITIATOR_RATING) {
+            events = events.stream().sorted(Comparator.comparingLong(e -> -e.getInitiator().getRating())).collect(Collectors.toList());
         }
 
-        addViewsCount(events, countUniqueIpAddresses);
+        if (events.size() != 0) {
+            addViewsCount(events, countUniqueIpAddresses);
+        }
         return events;
     }
 
@@ -117,7 +115,9 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());
 
-        addViewsCount(events, countUniqueIpAddresses);
+        if (events.size() != 0) {
+            addViewsCount(events, countUniqueIpAddresses);
+        }
         return events;
     }
 
@@ -146,8 +146,9 @@ public class EventServiceImpl implements EventService {
         List<EventShortDto> events = eventRepository.findAllByInitiatorId(userId, pageable).stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
-
-        addViewsCount(events, countUniqueIpAddresses);
+        if (events.size() != 0) {
+            addViewsCount(events, countUniqueIpAddresses);
+        }
         return events;
     }
 
@@ -306,6 +307,78 @@ public class EventServiceImpl implements EventService {
         eventRequestStatusUpdateResultDto.setRejectedRequests(rejectedRequestsDto);
 
         return eventRequestStatusUpdateResultDto;
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public EventFullDto like(Long userId, Long eventId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_EXISTS_TEMPLATE, userId)));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(String.format(EVENT_NOT_EXISTS_TEMPLATE, eventId)));
+
+        Set<User> likes = event.getLikes();
+        Set<User> dislikes = event.getDislikes();
+        boolean isAlreadyLikedByUser = likes.stream().anyMatch(u -> Objects.equals(u.getId(), userId));
+
+        if (isAlreadyLikedByUser) {
+            throw new ForbiddenException(EVENT_LIKED_BY_USER_MORE_THAN_ONCE_EXCEPTION);
+        }
+
+        Set<Long> confirmedRequestsUserIds = event.getRequests().stream()
+                .filter(request -> request.getStatus() == RequestStatus.CONFIRMED)
+                .map(request -> request.getRequester().getId())
+                .collect(Collectors.toSet());
+        Long eventInitiatorId = event.getInitiator().getId();
+
+        boolean isNonEventParticipant = !Objects.equals(eventInitiatorId, userId) && !confirmedRequestsUserIds.contains(userId);
+        if (isNonEventParticipant) {
+            throw new ForbiddenException(EVENT_LIKED_BY_NON_PARTICIPANT_EXCEPTION);
+        }
+
+        dislikes = dislikes.stream().filter(u -> !Objects.equals(u.getId(), userId)).collect(Collectors.toSet());
+        likes.add(user);
+
+        event.setDislikes(dislikes);
+        event.setLikes(likes);
+        return EventMapper.toEventFullDto(eventRepository.save(event));
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public EventFullDto dislike(Long userId, Long eventId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_EXISTS_TEMPLATE, userId)));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(String.format(EVENT_NOT_EXISTS_TEMPLATE, eventId)));
+
+        Set<User> dislikes = event.getDislikes();
+        Set<User> likes = event.getLikes();
+        boolean isAlreadyDislikedByUser = dislikes.stream().anyMatch(u -> Objects.equals(u.getId(), userId));
+
+        if (isAlreadyDislikedByUser) {
+            throw new ForbiddenException(EVENT_DISLIKED_BY_USER_MORE_THAN_ONCE_EXCEPTION);
+        }
+
+        Set<Long> confirmedRequestsUserIds = event.getRequests().stream()
+                .filter(request -> request.getStatus() == RequestStatus.CONFIRMED)
+                .map(request -> request.getRequester().getId())
+                .collect(Collectors.toSet());
+        Long eventInitiatorId = event.getInitiator().getId();
+
+        boolean isNonEventParticipant = !Objects.equals(eventInitiatorId, userId) && !confirmedRequestsUserIds.contains(userId);
+        if (isNonEventParticipant) {
+            throw new ForbiddenException(EVENT_DISLIKED_BY_NON_PARTICIPANT_EXCEPTION);
+        }
+
+        likes = likes.stream().filter(u -> !Objects.equals(u.getId(), userId)).collect(Collectors.toSet());
+        dislikes.add(user);
+
+        event.setLikes(likes);
+        event.setDislikes(dislikes);
+        return EventMapper.toEventFullDto(eventRepository.save(event));
     }
 
     private void validateEventDate(LocalDateTime eventDate) {

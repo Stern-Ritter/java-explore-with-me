@@ -1,0 +1,2468 @@
+{
+	"info": {
+		"_postman_id": "e316dc43-2e03-4647-9349-334b8deca440",
+		"name": "Feature Rating events",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13927934"
+	},
+	"item": [
+		{
+			"name": "Like события не существующим пользоватeлем",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.notFound;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что пользователь не найден\", function () {\r",
+							"    pm.expect(body.message).to.eq('User with id=999 was not found');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "999",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/like",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"like"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dislike события не существующим пользователем",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.notFound;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что пользователь не найден\", function () {\r",
+							"    pm.expect(body.message).to.eq('User with id=999 was not found');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "999",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"dislike"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like не существующего события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const user = await api.addUser(rnd.getUser());\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.notFound;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('Event with id=999 was not found');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/like",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"like"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Disike не существующего события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const user = await api.addUser(rnd.getUser());\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.notFound;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('Event with id=999 was not found');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"dislike"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like события пользователем не являющимся участником",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const nonParticipant = await api.addUser(rnd.getUser());\r",
+							"        pm.collectionVariables.set(\"userId\", nonParticipant.id)\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const event = await api.addEvent(initiator.id, rnd.getEvent(category.id));\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('User who is not a initiator or a participant of the event cannot like this event');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/like",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"like"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dislike события пользователем не являющимся участником",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const nonParticipant = await api.addUser(rnd.getUser());\r",
+							"        pm.collectionVariables.set(\"userId\", nonParticipant.id)\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const event = await api.addEvent(initiator.id, rnd.getEvent(category.id));\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('User who is not a initiator or a participant of the event cannot dislike this event');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"dislike"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like события пользователем являющимся не подтвержденным участником события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const participant = await api.addUser(rnd.getUser());\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const eventBody = rnd.getEvent(category.id);\r",
+							"        eventBody['requestModeration'] = true;\r",
+							"        let event = await api.addEvent(initiator.id, eventBody);\r",
+							"        event = await api.publishEvent(event.id);\r",
+							"        const requestToJoin = await api.publishParticipationRequest(event.id, participant.id);\r",
+							"\r",
+							"        pm.collectionVariables.set(\"userId\", participant.id)\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('User who is not a initiator or a participant of the event cannot like this event');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/like",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"like"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dislike события пользователем являющимся не подтвержденным участником события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const participant = await api.addUser(rnd.getUser());\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const eventBody = rnd.getEvent(category.id);\r",
+							"        eventBody['requestModeration'] = true;\r",
+							"        let event = await api.addEvent(initiator.id, eventBody);\r",
+							"        event = await api.publishEvent(event.id);\r",
+							"        const requestToJoin = await api.publishParticipationRequest(event.id, participant.id);\r",
+							"\r",
+							"        pm.collectionVariables.set(\"userId\", participant.id)\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('User who is not a initiator or a participant of the event cannot dislike this event');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"dislike"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like события инициатором события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        pm.collectionVariables.set(\"userId\", initiator.id)\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const event = await api.addEvent(initiator.id, rnd.getEvent(category.id));\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.success;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const source = pm.collectionVariables.get(\"response\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration\", function () {\r",
+							"pm.expect(body).to.have.property('id');\r",
+							"pm.expect(body).to.have.property('title');\r",
+							"pm.expect(body).to.have.property('annotation');\r",
+							"pm.expect(body).to.have.property('category');\r",
+							"pm.expect(body).to.have.property('paid');\r",
+							"pm.expect(body).to.have.property('eventDate');\r",
+							"pm.expect(body).to.have.property('initiator');\r",
+							"pm.expect(body).to.have.property('description');\r",
+							"pm.expect(body).to.have.property('participantLimit');\r",
+							"pm.expect(body).to.have.property('state');\r",
+							"pm.expect(body).to.have.property('createdOn');\r",
+							"pm.expect(body).to.have.property('location');\r",
+							"pm.expect(body).to.have.property('requestModeration');\r",
+							"pm.expect(body).to.have.property('rating');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+							"    pm.expect(body.annotation).equal(source.annotation, 'Аннотация отменённого события должна соответствовать аннотации события до отмены');\r",
+							"    pm.expect(body.category.id).equal(source.category.id, 'Категория отменённого события должна соответствовать категории события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"    pm.expect(body.eventDate).equal(source.eventDate, 'Дата проведения отменённого события должна соответствовать дате проведения события до отмены');\r",
+							"    pm.expect(body.description).equal(source.description, 'Описание отменённого события должно соответствовать описанию события до отмены');\r",
+							"    pm.expect(body.title).equal(source.title, 'Название отменённого события должно соответствовать названию события до отмены');\r",
+							"    pm.expect(body.participantLimit.toString()).equal(source.participantLimit.toString(), 'Лимит участников отменённого события должен соответствовать лимиту участников события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"     pm.expect(body.state).equal(\"PENDING\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны содержать корректный рейтинг\", function () {\r",
+							"     pm.expect(body.rating).equal(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/like",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"like"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Disike события инициатором события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        pm.collectionVariables.set(\"userId\", initiator.id)\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const event = await api.addEvent(initiator.id, rnd.getEvent(category.id));\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.success;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const source = pm.collectionVariables.get(\"response\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration\", function () {\r",
+							"pm.expect(body).to.have.property('id');\r",
+							"pm.expect(body).to.have.property('title');\r",
+							"pm.expect(body).to.have.property('annotation');\r",
+							"pm.expect(body).to.have.property('category');\r",
+							"pm.expect(body).to.have.property('paid');\r",
+							"pm.expect(body).to.have.property('eventDate');\r",
+							"pm.expect(body).to.have.property('initiator');\r",
+							"pm.expect(body).to.have.property('description');\r",
+							"pm.expect(body).to.have.property('participantLimit');\r",
+							"pm.expect(body).to.have.property('state');\r",
+							"pm.expect(body).to.have.property('createdOn');\r",
+							"pm.expect(body).to.have.property('location');\r",
+							"pm.expect(body).to.have.property('requestModeration');\r",
+							"pm.expect(body).to.have.property('rating');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+							"    pm.expect(body.annotation).equal(source.annotation, 'Аннотация отменённого события должна соответствовать аннотации события до отмены');\r",
+							"    pm.expect(body.category.id).equal(source.category.id, 'Категория отменённого события должна соответствовать категории события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"    pm.expect(body.eventDate).equal(source.eventDate, 'Дата проведения отменённого события должна соответствовать дате проведения события до отмены');\r",
+							"    pm.expect(body.description).equal(source.description, 'Описание отменённого события должно соответствовать описанию события до отмены');\r",
+							"    pm.expect(body.title).equal(source.title, 'Название отменённого события должно соответствовать названию события до отмены');\r",
+							"    pm.expect(body.participantLimit.toString()).equal(source.participantLimit.toString(), 'Лимит участников отменённого события должен соответствовать лимиту участников события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"     pm.expect(body.state).equal(\"PENDING\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны содержать корректный рейтинг\", function () {\r",
+							"     pm.expect(body.rating).equal(-1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"dislike"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like события пользователем являющимся подтвержденным участником события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const participant = await api.addUser(rnd.getUser());\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const eventBody = rnd.getEvent(category.id);\r",
+							"        eventBody['requestModeration'] = true;\r",
+							"        let event = await api.addEvent(initiator.id, eventBody);\r",
+							"        event = await api.publishEvent(event.id);\r",
+							"        const requestToJoin = await api.publishParticipationRequest(event.id, participant.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, requestToJoin.id);\r",
+							"\r",
+							"        pm.collectionVariables.set(\"userId\", participant.id)\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.success;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const source = pm.collectionVariables.get(\"response\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration\", function () {\r",
+							"pm.expect(body).to.have.property('id');\r",
+							"pm.expect(body).to.have.property('title');\r",
+							"pm.expect(body).to.have.property('annotation');\r",
+							"pm.expect(body).to.have.property('category');\r",
+							"pm.expect(body).to.have.property('paid');\r",
+							"pm.expect(body).to.have.property('eventDate');\r",
+							"pm.expect(body).to.have.property('initiator');\r",
+							"pm.expect(body).to.have.property('description');\r",
+							"pm.expect(body).to.have.property('participantLimit');\r",
+							"pm.expect(body).to.have.property('state');\r",
+							"pm.expect(body).to.have.property('createdOn');\r",
+							"pm.expect(body).to.have.property('location');\r",
+							"pm.expect(body).to.have.property('requestModeration');\r",
+							"pm.expect(body).to.have.property('rating');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+							"    pm.expect(body.annotation).equal(source.annotation, 'Аннотация отменённого события должна соответствовать аннотации события до отмены');\r",
+							"    pm.expect(body.category.id).equal(source.category.id, 'Категория отменённого события должна соответствовать категории события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"    pm.expect(body.eventDate).equal(source.eventDate, 'Дата проведения отменённого события должна соответствовать дате проведения события до отмены');\r",
+							"    pm.expect(body.description).equal(source.description, 'Описание отменённого события должно соответствовать описанию события до отмены');\r",
+							"    pm.expect(body.title).equal(source.title, 'Название отменённого события должно соответствовать названию события до отмены');\r",
+							"    pm.expect(body.participantLimit.toString()).equal(source.participantLimit.toString(), 'Лимит участников отменённого события должен соответствовать лимиту участников события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"    pm.expect(body.state).equal(source.state);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны содержать корректный рейтинг\", function () {\r",
+							"     pm.expect(body.rating).equal(1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/like",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"like"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dislike события пользователем являющимся подтвержденным участником события",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const participant = await api.addUser(rnd.getUser());\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const eventBody = rnd.getEvent(category.id);\r",
+							"        eventBody['requestModeration'] = true;\r",
+							"        let event = await api.addEvent(initiator.id, eventBody);\r",
+							"        event = await api.publishEvent(event.id);\r",
+							"        const requestToJoin = await api.publishParticipationRequest(event.id, participant.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, requestToJoin.id);\r",
+							"\r",
+							"        pm.collectionVariables.set(\"userId\", participant.id)\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.success;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const source = pm.collectionVariables.get(\"response\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration\", function () {\r",
+							"pm.expect(body).to.have.property('id');\r",
+							"pm.expect(body).to.have.property('title');\r",
+							"pm.expect(body).to.have.property('annotation');\r",
+							"pm.expect(body).to.have.property('category');\r",
+							"pm.expect(body).to.have.property('paid');\r",
+							"pm.expect(body).to.have.property('eventDate');\r",
+							"pm.expect(body).to.have.property('initiator');\r",
+							"pm.expect(body).to.have.property('description');\r",
+							"pm.expect(body).to.have.property('participantLimit');\r",
+							"pm.expect(body).to.have.property('state');\r",
+							"pm.expect(body).to.have.property('createdOn');\r",
+							"pm.expect(body).to.have.property('location');\r",
+							"pm.expect(body).to.have.property('requestModeration');\r",
+							"pm.expect(body).to.have.property('rating');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+							"    pm.expect(body.annotation).equal(source.annotation, 'Аннотация отменённого события должна соответствовать аннотации события до отмены');\r",
+							"    pm.expect(body.category.id).equal(source.category.id, 'Категория отменённого события должна соответствовать категории события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"    pm.expect(body.eventDate).equal(source.eventDate, 'Дата проведения отменённого события должна соответствовать дате проведения события до отмены');\r",
+							"    pm.expect(body.description).equal(source.description, 'Описание отменённого события должно соответствовать описанию события до отмены');\r",
+							"    pm.expect(body.title).equal(source.title, 'Название отменённого события должно соответствовать названию события до отмены');\r",
+							"    pm.expect(body.participantLimit.toString()).equal(source.participantLimit.toString(), 'Лимит участников отменённого события должен соответствовать лимиту участников события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"    pm.expect(body.state).equal(source.state);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны содержать корректный рейтинг\", function () {\r",
+							"     pm.expect(body.rating).equal(-1);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"dislike"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like события пользователем являющимся подтвержденным участиком более одного раза",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const participant = await api.addUser(rnd.getUser());\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const eventBody = rnd.getEvent(category.id);\r",
+							"        eventBody['requestModeration'] = true;\r",
+							"        let event = await api.addEvent(initiator.id, eventBody);\r",
+							"        event = await api.publishEvent(event.id);\r",
+							"        const requestToJoin = await api.publishParticipationRequest(event.id, participant.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, requestToJoin.id);\r",
+							"        await api.likeEvent(event.id, participant.id);\r",
+							"\r",
+							"        pm.collectionVariables.set(\"userId\", participant.id)\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('Event can be liked by user only once');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/like",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"like"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dislike события пользователем являющимся подтвержденным участиком более одного раза",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const participant = await api.addUser(rnd.getUser());\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const eventBody = rnd.getEvent(category.id);\r",
+							"        eventBody['requestModeration'] = true;\r",
+							"        let event = await api.addEvent(initiator.id, eventBody);\r",
+							"        event = await api.publishEvent(event.id);\r",
+							"        const requestToJoin = await api.publishParticipationRequest(event.id, participant.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, requestToJoin.id);\r",
+							"        await api.dislikeEvent(event.id, participant.id);\r",
+							"\r",
+							"        pm.collectionVariables.set(\"userId\", participant.id)\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать сообщение о том, что событие не найдено\", function () {\r",
+							"    pm.expect(body.message).to.eq('Event can be disliked by user only once');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-User-Id",
+						"value": "{{userId}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events",
+						":eventId",
+						"dislike"
+					],
+					"variable": [
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Корректно рассчитывается рейтинг события на основе всех likes и dislikes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const firstParticipant = await api.addUser(rnd.getUser());\r",
+							"        const secondParticipant = await api.addUser(rnd.getUser());\r",
+							"        const thirdParticipant = await api.addUser(rnd.getUser());\r",
+							"        const fourthParticipant = await api.addUser(rnd.getUser());\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"        const eventBody = rnd.getEvent(category.id);\r",
+							"        eventBody['requestModeration'] = true;\r",
+							"        let event = await api.addEvent(initiator.id, eventBody);\r",
+							"        event = await api.publishEvent(event.id);\r",
+							"        const firstRequestToJoin = await api.publishParticipationRequest(event.id, firstParticipant.id);\r",
+							"        const secondRequestToJoin = await api.publishParticipationRequest(event.id, secondParticipant.id);\r",
+							"        const thirdRequestToJoin = await api.publishParticipationRequest(event.id, thirdParticipant.id);\r",
+							"        const fourthRequestToJoin = await api.publishParticipationRequest(event.id, fourthParticipant.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, firstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, secondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, thirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(event.id, initiator.id, fourthRequestToJoin.id);\r",
+							"        await api.likeEvent(event.id, firstParticipant.id);\r",
+							"        await api.dislikeEvent(event.id, secondParticipant.id);\r",
+							"        await api.dislikeEvent(event.id, thirdParticipant.id);\r",
+							"        await api.dislikeEvent(event.id, fourthParticipant.id);\r",
+							"        \r",
+							"        pm.collectionVariables.set(\"userId\", initiator.id)\r",
+							"        pm.collectionVariables.set(\"eventId\", event.id)\r",
+							"        pm.collectionVariables.set(\"response\", event);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.success;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const source = pm.collectionVariables.get(\"response\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, location, requestModeration\", function () {\r",
+							"pm.expect(body).to.have.property('id');\r",
+							"pm.expect(body).to.have.property('title');\r",
+							"pm.expect(body).to.have.property('annotation');\r",
+							"pm.expect(body).to.have.property('category');\r",
+							"pm.expect(body).to.have.property('paid');\r",
+							"pm.expect(body).to.have.property('eventDate');\r",
+							"pm.expect(body).to.have.property('initiator');\r",
+							"pm.expect(body).to.have.property('description');\r",
+							"pm.expect(body).to.have.property('participantLimit');\r",
+							"pm.expect(body).to.have.property('state');\r",
+							"pm.expect(body).to.have.property('createdOn');\r",
+							"pm.expect(body).to.have.property('location');\r",
+							"pm.expect(body).to.have.property('requestModeration');\r",
+							"pm.expect(body).to.have.property('rating');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+							"    pm.expect(body.annotation).equal(source.annotation, 'Аннотация отменённого события должна соответствовать аннотации события до отмены');\r",
+							"    pm.expect(body.category.id).equal(source.category.id, 'Категория отменённого события должна соответствовать категории события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"    pm.expect(body.eventDate).equal(source.eventDate, 'Дата проведения отменённого события должна соответствовать дате проведения события до отмены');\r",
+							"    pm.expect(body.description).equal(source.description, 'Описание отменённого события должно соответствовать описанию события до отмены');\r",
+							"    pm.expect(body.title).equal(source.title, 'Название отменённого события должно соответствовать названию события до отмены');\r",
+							"    pm.expect(body.participantLimit.toString()).equal(source.participantLimit.toString(), 'Лимит участников отменённого события должен соответствовать лимиту участников события до отмены');\r",
+							"    pm.expect(body.paid.toString()).equal(source.paid.toString(), 'Стоимость отменённого события должна соответствовать стоимости события до отмены');\r",
+							"     pm.expect(body.state).equal(\"PUBLISHED\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны содержать корректный рейтинг\", function () {\r",
+							"     pm.expect(body.rating).equal(-2);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/users/:userId/events/:eventId",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						":userId",
+						"events",
+						":eventId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "{{userId}}"
+						},
+						{
+							"key": "eventId",
+							"value": "{{eventId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Корректно рассчитывается рейтинг пользователя на основе рейтингов событий в которых он является инициатором",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const firstParticipant = await api.addUser(rnd.getUser());\r",
+							"        const secondParticipant = await api.addUser(rnd.getUser());\r",
+							"        const thirdParticipant = await api.addUser(rnd.getUser());\r",
+							"        const fourthParticipant = await api.addUser(rnd.getUser());\r",
+							"\r",
+							"        const firstEventcategory = await api.addCategory(rnd.getCategory());\r",
+							"        const firstEventBody = rnd.getEvent(firstEventcategory.id);\r",
+							"        firstEventBody['requestModeration'] = true;\r",
+							"        let firstEvent = await api.addEvent(initiator.id, firstEventBody);\r",
+							"        firstEvent = await api.publishEvent(firstEvent.id);\r",
+							"\r",
+							"        const secondEventCategory = await api.addCategory(rnd.getCategory());\r",
+							"        const secondEventBody = rnd.getEvent(secondEventCategory.id);\r",
+							"        secondEventBody['requestModeration'] = true;\r",
+							"        let secondEvent = await api.addEvent(initiator.id, secondEventBody);\r",
+							"        secondEvent = await api.publishEvent(secondEvent.id);\r",
+							"\r",
+							"        const firstEventFirstRequestToJoin = await api.publishParticipationRequest(firstEvent.id, firstParticipant.id);\r",
+							"        const firstEventSecondRequestToJoin = await api.publishParticipationRequest(firstEvent.id, secondParticipant.id);\r",
+							"        const firstEventThirdRequestToJoin = await api.publishParticipationRequest(firstEvent.id, thirdParticipant.id);\r",
+							"        const firstEventFourthRequestToJoin = await api.publishParticipationRequest(firstEvent.id, fourthParticipant.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        const secondEventFirstRequestToJoin = await api.publishParticipationRequest(secondEvent.id, firstParticipant.id);\r",
+							"        const secondEventSecondRequestToJoin = await api.publishParticipationRequest(secondEvent.id, secondParticipant.id);\r",
+							"        const secondEventThirdRequestToJoin = await api.publishParticipationRequest(secondEvent.id, thirdParticipant.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, initiator.id, secondEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, initiator.id, secondEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, initiator.id, secondEventThirdRequestToJoin.id);\r",
+							"\r",
+							"        await api.likeEvent(firstEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(firstEvent.id, secondParticipant.id);\r",
+							"        await api.likeEvent(firstEvent.id, thirdParticipant.id);\r",
+							"        await api.dislikeEvent(firstEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        await api.likeEvent(secondEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(secondEvent.id, secondParticipant.id);\r",
+							"        await api.dislikeEvent(secondEvent.id, thirdParticipant.id);\r",
+							"        \r",
+							"        pm.collectionVariables.set(\"userId\", initiator.id)\r",
+							"        pm.collectionVariables.set(\"response\", initiator);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.ok;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const source = pm.collectionVariables.get(\"response\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Пользователи должны содержать поля: id, name, email\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('id');\r",
+							"    pm.expect(body[0]).to.have.property('name');\r",
+							"    pm.expect(body[0]).to.have.property('email');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Должен быть найден только один пользователь по заданному фильтру\", function () {\r",
+							"    pm.expect(body.length).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные в ответе должны содержать корректный рейтинг пользователя\", function () {\r",
+							"    pm.expect(body[0].rating).equal(2);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/admin/users?ids={{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"users"
+					],
+					"query": [
+						{
+							"key": "ids",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Корректно сортируются события по рейтингу",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const initiator = await api.addUser(rnd.getUser());\r",
+							"        const firstParticipant = await api.addUser(rnd.getUser());\r",
+							"        const secondParticipant = await api.addUser(rnd.getUser());\r",
+							"        const thirdParticipant = await api.addUser(rnd.getUser());\r",
+							"        const fourthParticipant = await api.addUser(rnd.getUser());\r",
+							"\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"\r",
+							"        const firstEventBody = rnd.getEvent(category.id);\r",
+							"        firstEventBody['requestModeration'] = true;\r",
+							"        let firstEvent = await api.addEvent(initiator.id, firstEventBody);\r",
+							"        firstEvent = await api.publishEvent(firstEvent.id);\r",
+							"\r",
+							"        const secondEventBody = rnd.getEvent(category.id);\r",
+							"        secondEventBody['requestModeration'] = true;\r",
+							"        let secondEvent = await api.addEvent(initiator.id, secondEventBody);\r",
+							"        secondEvent = await api.publishEvent(secondEvent.id);\r",
+							"\r",
+							"        const thirdEventBody = rnd.getEvent(category.id);\r",
+							"        thirdEventBody['requestModeration'] = true;\r",
+							"        let thirdEvent = await api.addEvent(initiator.id, thirdEventBody);\r",
+							"        thirdEvent = await api.publishEvent(thirdEvent.id);\r",
+							"\r",
+							"        const fourthEventBody = rnd.getEvent(category.id);\r",
+							"        fourthEventBody['requestModeration'] = true;\r",
+							"        let fourthEvent = await api.addEvent(initiator.id, fourthEventBody);\r",
+							"        fourthEvent = await api.publishEvent(fourthEvent.id);\r",
+							"\r",
+							"        const firstEventFirstRequestToJoin = await api.publishParticipationRequest(firstEvent.id, firstParticipant.id);\r",
+							"        const firstEventSecondRequestToJoin = await api.publishParticipationRequest(firstEvent.id, secondParticipant.id);\r",
+							"        const firstEventThirdRequestToJoin = await api.publishParticipationRequest(firstEvent.id, thirdParticipant.id);\r",
+							"        const firstEventFourthRequestToJoin = await api.publishParticipationRequest(firstEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        const secondEventFirstRequestToJoin = await api.publishParticipationRequest(secondEvent.id, firstParticipant.id);\r",
+							"        const secondEventSecondRequestToJoin = await api.publishParticipationRequest(secondEvent.id, secondParticipant.id);\r",
+							"        const secondEventThirdRequestToJoin = await api.publishParticipationRequest(secondEvent.id, thirdParticipant.id);\r",
+							"        const secondEventFourthRequestToJoin = await api.publishParticipationRequest(secondEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        const thirdEventFirstRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, firstParticipant.id);\r",
+							"        const thirdEventSecondRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, secondParticipant.id);\r",
+							"        const thirdEventThirdRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, thirdParticipant.id);\r",
+							"        const thirdEventFourthRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        const fourthEventFirstRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, firstParticipant.id);\r",
+							"        const fourthEventSecondRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, secondParticipant.id);\r",
+							"        const fourthEventThirdRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, thirdParticipant.id);\r",
+							"        const fourthEventFourthRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, initiator.id, firstEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, initiator.id, secondEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, initiator.id, secondEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, initiator.id, secondEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, initiator.id, secondEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, initiator.id, thirdEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, initiator.id, thirdEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, initiator.id, thirdEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, initiator.id, thirdEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, initiator.id, fourthEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, initiator.id, fourthEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, initiator.id, fourthEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, initiator.id, fourthEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.likeEvent(firstEvent.id, firstParticipant.id);\r",
+							"        await api.dislikeEvent(firstEvent.id, secondParticipant.id);\r",
+							"        await api.dislikeEvent(firstEvent.id, thirdParticipant.id);\r",
+							"        firstEvent = await api.dislikeEvent(firstEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        await api.likeEvent(secondEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(secondEvent.id, secondParticipant.id);\r",
+							"        secondEvent = await api.likeEvent(secondEvent.id, thirdParticipant.id);\r",
+							"\r",
+							"        await api.likeEvent(thirdEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(thirdEvent.id, secondParticipant.id);\r",
+							"        await api.dislikeEvent(thirdEvent.id, thirdParticipant.id);\r",
+							"        thirdEvent = await api.dislikeEvent(thirdEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        await api.likeEvent(fourthEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(fourthEvent.id, secondParticipant.id);\r",
+							"        await api.likeEvent(fourthEvent.id, thirdParticipant.id);\r",
+							"        fourthEvent = await api.likeEvent(fourthEvent.id, fourthParticipant.id);\r",
+							"        \r",
+							"        pm.collectionVariables.set(\"categoryId\", category.id)\r",
+							"        pm.collectionVariables.set(\"firstResponse\", firstEvent);\r",
+							"        pm.collectionVariables.set(\"secondResponse\", secondEvent);\r",
+							"        pm.collectionVariables.set(\"thirdResponse\", thirdEvent);\r",
+							"        pm.collectionVariables.set(\"fourthResponse\", fourthEvent);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.success;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const firstSource = pm.collectionVariables.get(\"firstResponse\");\r",
+							"const secondSource = pm.collectionVariables.get(\"secondResponse\");\r",
+							"const thirdSource = pm.collectionVariables.get(\"thirdResponse\");\r",
+							"const fourthSource = pm.collectionVariables.get(\"fourthResponse\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Должно быть найдено четыре события по заданному фильтру\", function () {\r",
+							"    pm.expect(body.length).to.eql(4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Событие должно содержать события отсортированные по убыванию рейтинга события\", function () {\r",
+							"pm.expect(body[0].id).equal(fourthSource.id);\r",
+							"pm.expect(body[0].title).equal(fourthSource.title);\r",
+							"pm.expect(body[0].annotation).equal(fourthSource.annotation);\r",
+							"pm.expect(body[0].category.toString()).equal(fourthSource.category.toString());\r",
+							"pm.expect(body[0].paid).equal(fourthSource.paid);\r",
+							"pm.expect(body[0].eventDate).equal(fourthSource.eventDate);\r",
+							"pm.expect(body[0].initiator.toString()).equal(fourthSource.initiator.toString());\r",
+							"pm.expect(body[0].description).equal(fourthSource.description);\r",
+							"pm.expect(body[0].participantLimit).equal(fourthSource.participantLimit);\r",
+							"pm.expect(body[0].state).equal(fourthSource.state);\r",
+							"pm.expect(body[0].createdOn).equal(fourthSource.createdOn);\r",
+							"pm.expect(body[0].location.toString()).equal(fourthSource.location.toString());\r",
+							"pm.expect(body[0].requestModeration).equal(fourthSource.requestModeration);\r",
+							"pm.expect(body[0].rating).equal(fourthSource.rating);\r",
+							"\r",
+							"pm.expect(body[1].id).equal(secondSource.id);\r",
+							"pm.expect(body[1].title).equal(secondSource.title);\r",
+							"pm.expect(body[1].annotation).equal(secondSource.annotation);\r",
+							"pm.expect(body[1].category.toString()).equal(secondSource.category.toString());\r",
+							"pm.expect(body[1].paid).equal(secondSource.paid);\r",
+							"pm.expect(body[1].eventDate).equal(secondSource.eventDate);\r",
+							"pm.expect(body[1].initiator.toString()).equal(secondSource.initiator.toString());\r",
+							"pm.expect(body[1].description).equal(secondSource.description);\r",
+							"pm.expect(body[1].participantLimit).equal(secondSource.participantLimit);\r",
+							"pm.expect(body[1].state).equal(secondSource.state);\r",
+							"pm.expect(body[1].createdOn).equal(secondSource.createdOn);\r",
+							"pm.expect(body[1].location.toString()).equal(secondSource.location.toString());\r",
+							"pm.expect(body[1].requestModeration).equal(secondSource.requestModeration);\r",
+							"pm.expect(body[1].rating).equal(secondSource.rating);\r",
+							"\r",
+							"pm.expect(body[2].id).equal(thirdSource.id);\r",
+							"pm.expect(body[2].title).equal(thirdSource.title);\r",
+							"pm.expect(body[2].annotation).equal(thirdSource.annotation);\r",
+							"pm.expect(body[2].category.toString()).equal(thirdSource.category.toString());\r",
+							"pm.expect(body[2].paid).equal(thirdSource.paid);\r",
+							"pm.expect(body[2].eventDate).equal(thirdSource.eventDate);\r",
+							"pm.expect(body[2].initiator.toString()).equal(thirdSource.initiator.toString());\r",
+							"pm.expect(body[2].description).equal(thirdSource.description);\r",
+							"pm.expect(body[2].participantLimit).equal(thirdSource.participantLimit);\r",
+							"pm.expect(body[2].state).equal(thirdSource.state);\r",
+							"pm.expect(body[2].createdOn).equal(thirdSource.createdOn);\r",
+							"pm.expect(body[2].location.toString()).equal(thirdSource.location.toString());\r",
+							"pm.expect(body[2].requestModeration).equal(thirdSource.requestModeration);\r",
+							"pm.expect(body[2].rating).equal(thirdSource.rating);\r",
+							"\r",
+							"pm.expect(body[3].id).equal(firstSource.id);\r",
+							"pm.expect(body[3].title).equal(firstSource.title);\r",
+							"pm.expect(body[3].annotation).equal(firstSource.annotation);\r",
+							"pm.expect(body[3].category.toString()).equal(firstSource.category.toString());\r",
+							"pm.expect(body[3].paid).equal(firstSource.paid);\r",
+							"pm.expect(body[3].eventDate).equal(firstSource.eventDate);\r",
+							"pm.expect(body[3].initiator.toString()).equal(firstSource.initiator.toString());\r",
+							"pm.expect(body[3].description).equal(firstSource.description);\r",
+							"pm.expect(body[3].participantLimit).equal(firstSource.participantLimit);\r",
+							"pm.expect(body[3].state).equal(firstSource.state);\r",
+							"pm.expect(body[3].createdOn).equal(firstSource.createdOn);\r",
+							"pm.expect(body[3].location.toString()).equal(firstSource.location.toString());\r",
+							"pm.expect(body[3].requestModeration).equal(firstSource.requestModeration);\r",
+							"pm.expect(body[3].rating).equal(firstSource.rating);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events?rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&onlyAvailable=false&sort=EVENT_RATING&from=0&size=1000&categories={{categoryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events"
+					],
+					"query": [
+						{
+							"key": "rangeStart",
+							"value": "2022-01-06%2013%3A30%3A38"
+						},
+						{
+							"key": "rangeEnd",
+							"value": "2097-09-06%2013%3A30%3A38"
+						},
+						{
+							"key": "onlyAvailable",
+							"value": "false"
+						},
+						{
+							"key": "sort",
+							"value": "EVENT_RATING"
+						},
+						{
+							"key": "from",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "1000"
+						},
+						{
+							"key": "categories",
+							"value": "{{categoryId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Корректно сортируются события по рейтингу инициатора",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const main = async () => {\r",
+							"    const api = new API(pm);\r",
+							"    const rnd = new RandomUtils();\r",
+							"\r",
+							"    try {\r",
+							"        const firstInitiator = await api.addUser(rnd.getUser());\r",
+							"        const secondInitiator = await api.addUser(rnd.getUser());\r",
+							"        const thirdInitiator = await api.addUser(rnd.getUser());\r",
+							"\r",
+							"        const firstParticipant = await api.addUser(rnd.getUser());\r",
+							"        const secondParticipant = await api.addUser(rnd.getUser());\r",
+							"        const thirdParticipant = await api.addUser(rnd.getUser());\r",
+							"        const fourthParticipant = await api.addUser(rnd.getUser());\r",
+							"\r",
+							"        const category = await api.addCategory(rnd.getCategory());\r",
+							"\r",
+							"        const firstEventBody = rnd.getEvent(category.id);\r",
+							"        firstEventBody['requestModeration'] = true;\r",
+							"        let firstEvent = await api.addEvent(firstInitiator.id, firstEventBody);\r",
+							"        firstEvent = await api.publishEvent(firstEvent.id);\r",
+							"\r",
+							"        const secondEventBody = rnd.getEvent(category.id);\r",
+							"        secondEventBody['requestModeration'] = true;\r",
+							"        let secondEvent = await api.addEvent(firstInitiator.id, secondEventBody);\r",
+							"        secondEvent = await api.publishEvent(secondEvent.id);\r",
+							"\r",
+							"        const thirdEventBody = rnd.getEvent(category.id);\r",
+							"        thirdEventBody['requestModeration'] = true;\r",
+							"        let thirdEvent = await api.addEvent(secondInitiator.id, thirdEventBody);\r",
+							"        thirdEvent = await api.publishEvent(thirdEvent.id);\r",
+							"\r",
+							"        const fourthEventBody = rnd.getEvent(category.id);\r",
+							"        fourthEventBody['requestModeration'] = true;\r",
+							"        let fourthEvent = await api.addEvent(thirdInitiator.id, fourthEventBody);\r",
+							"        fourthEvent = await api.publishEvent(fourthEvent.id);\r",
+							"\r",
+							"        const firstEventFirstRequestToJoin = await api.publishParticipationRequest(firstEvent.id, firstParticipant.id);\r",
+							"        const firstEventSecondRequestToJoin = await api.publishParticipationRequest(firstEvent.id, secondParticipant.id);\r",
+							"        const firstEventThirdRequestToJoin = await api.publishParticipationRequest(firstEvent.id, thirdParticipant.id);\r",
+							"        const firstEventFourthRequestToJoin = await api.publishParticipationRequest(firstEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        const secondEventFirstRequestToJoin = await api.publishParticipationRequest(secondEvent.id, firstParticipant.id);\r",
+							"        const secondEventSecondRequestToJoin = await api.publishParticipationRequest(secondEvent.id, secondParticipant.id);\r",
+							"        const secondEventThirdRequestToJoin = await api.publishParticipationRequest(secondEvent.id, thirdParticipant.id);\r",
+							"        const secondEventFourthRequestToJoin = await api.publishParticipationRequest(secondEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        const thirdEventFirstRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, firstParticipant.id);\r",
+							"        const thirdEventSecondRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, secondParticipant.id);\r",
+							"        const thirdEventThirdRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, thirdParticipant.id);\r",
+							"        const thirdEventFourthRequestToJoin = await api.publishParticipationRequest(thirdEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        const fourthEventFirstRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, firstParticipant.id);\r",
+							"        const fourthEventSecondRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, secondParticipant.id);\r",
+							"        const fourthEventThirdRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, thirdParticipant.id);\r",
+							"        const fourthEventFourthRequestToJoin = await api.publishParticipationRequest(fourthEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, firstInitiator.id, firstEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, firstInitiator.id, firstEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, firstInitiator.id, firstEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(firstEvent.id, firstInitiator.id, firstEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, firstInitiator.id, secondEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, firstInitiator.id, secondEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, firstInitiator.id, secondEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(secondEvent.id, firstInitiator.id, secondEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, secondInitiator.id, thirdEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, secondInitiator.id, thirdEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, secondInitiator.id, thirdEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(thirdEvent.id, secondInitiator.id, thirdEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, thirdInitiator.id, fourthEventFirstRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, thirdInitiator.id, fourthEventSecondRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, thirdInitiator.id, fourthEventThirdRequestToJoin.id);\r",
+							"        await api.acceptParticipationRequest(fourthEvent.id, thirdInitiator.id, fourthEventFourthRequestToJoin.id);\r",
+							"\r",
+							"        await api.likeEvent(firstEvent.id, firstParticipant.id);\r",
+							"        await api.dislikeEvent(firstEvent.id, secondParticipant.id);\r",
+							"        await api.dislikeEvent(firstEvent.id, thirdParticipant.id);\r",
+							"        firstEvent = await api.dislikeEvent(firstEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        await api.likeEvent(secondEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(secondEvent.id, secondParticipant.id);\r",
+							"        secondEvent = await api.likeEvent(secondEvent.id, thirdParticipant.id);\r",
+							"\r",
+							"        await api.likeEvent(thirdEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(thirdEvent.id, secondParticipant.id);\r",
+							"        await api.dislikeEvent(thirdEvent.id, thirdParticipant.id);\r",
+							"        thirdEvent = await api.dislikeEvent(thirdEvent.id, fourthParticipant.id);\r",
+							"\r",
+							"        await api.likeEvent(fourthEvent.id, firstParticipant.id);\r",
+							"        await api.likeEvent(fourthEvent.id, secondParticipant.id);\r",
+							"        await api.likeEvent(fourthEvent.id, thirdParticipant.id);\r",
+							"        fourthEvent = await api.likeEvent(fourthEvent.id, fourthParticipant.id);\r",
+							"        \r",
+							"        pm.collectionVariables.set(\"categoryId\", category.id)\r",
+							"        pm.collectionVariables.set(\"firstResponse\", firstEvent);\r",
+							"        pm.collectionVariables.set(\"secondResponse\", secondEvent);\r",
+							"        pm.collectionVariables.set(\"thirdResponse\", thirdEvent);\r",
+							"        pm.collectionVariables.set(\"fourthResponse\", fourthEvent);\r",
+							"    } catch(err) {\r",
+							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"const interval = setInterval(() => {}, 1000);\r",
+							"\r",
+							"setTimeout(async () => \r",
+							"    {\r",
+							"        try {\r",
+							"            await main();\r",
+							"        } catch (e) {\r",
+							"            console.error(e);\r",
+							"        } finally {\r",
+							"            clearInterval(interval);\r",
+							"        }\r",
+							"    },  \r",
+							"    100 \r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+							"    pm.response.to.be.success;    \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"const firstSource = pm.collectionVariables.get(\"firstResponse\");\r",
+							"const secondSource = pm.collectionVariables.get(\"secondResponse\");\r",
+							"const thirdSource = pm.collectionVariables.get(\"thirdResponse\");\r",
+							"const fourthSource = pm.collectionVariables.get(\"fourthResponse\");\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Должно быть найдено четыре события по заданному фильтру\", function () {\r",
+							"    pm.expect(body.length).to.eql(4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Событие должно содержать события отсортированные по убыванию рейтинга инициатора события\", function () {\r",
+							"pm.expect(body[0].id).equal(fourthSource.id);\r",
+							"pm.expect(body[0].title).equal(fourthSource.title);\r",
+							"pm.expect(body[0].annotation).equal(fourthSource.annotation);\r",
+							"pm.expect(body[0].category.toString()).equal(fourthSource.category.toString());\r",
+							"pm.expect(body[0].paid).equal(fourthSource.paid);\r",
+							"pm.expect(body[0].eventDate).equal(fourthSource.eventDate);\r",
+							"pm.expect(body[0].initiator.toString()).equal(fourthSource.initiator.toString());\r",
+							"pm.expect(body[0].description).equal(fourthSource.description);\r",
+							"pm.expect(body[0].participantLimit).equal(fourthSource.participantLimit);\r",
+							"pm.expect(body[0].state).equal(fourthSource.state);\r",
+							"pm.expect(body[0].createdOn).equal(fourthSource.createdOn);\r",
+							"pm.expect(body[0].location.toString()).equal(fourthSource.location.toString());\r",
+							"pm.expect(body[0].requestModeration).equal(fourthSource.requestModeration);\r",
+							"pm.expect(body[0].rating).equal(fourthSource.rating);\r",
+							"\r",
+							"pm.expect(body[1].id).equal(firstSource.id);\r",
+							"pm.expect(body[1].title).equal(firstSource.title);\r",
+							"pm.expect(body[1].annotation).equal(firstSource.annotation);\r",
+							"pm.expect(body[1].category.toString()).equal(firstSource.category.toString());\r",
+							"pm.expect(body[1].paid).equal(firstSource.paid);\r",
+							"pm.expect(body[1].eventDate).equal(firstSource.eventDate);\r",
+							"pm.expect(body[1].initiator.toString()).equal(firstSource.initiator.toString());\r",
+							"pm.expect(body[1].description).equal(firstSource.description);\r",
+							"pm.expect(body[1].participantLimit).equal(firstSource.participantLimit);\r",
+							"pm.expect(body[1].state).equal(firstSource.state);\r",
+							"pm.expect(body[1].createdOn).equal(firstSource.createdOn);\r",
+							"pm.expect(body[1].location.toString()).equal(firstSource.location.toString());\r",
+							"pm.expect(body[1].requestModeration).equal(firstSource.requestModeration);\r",
+							"pm.expect(body[1].rating).equal(firstSource.rating);\r",
+							"\r",
+							"pm.expect(body[2].id).equal(secondSource.id);\r",
+							"pm.expect(body[2].title).equal(secondSource.title);\r",
+							"pm.expect(body[2].annotation).equal(secondSource.annotation);\r",
+							"pm.expect(body[2].category.toString()).equal(secondSource.category.toString());\r",
+							"pm.expect(body[2].paid).equal(secondSource.paid);\r",
+							"pm.expect(body[2].eventDate).equal(secondSource.eventDate);\r",
+							"pm.expect(body[2].initiator.toString()).equal(secondSource.initiator.toString());\r",
+							"pm.expect(body[2].description).equal(secondSource.description);\r",
+							"pm.expect(body[2].participantLimit).equal(secondSource.participantLimit);\r",
+							"pm.expect(body[2].state).equal(secondSource.state);\r",
+							"pm.expect(body[2].createdOn).equal(secondSource.createdOn);\r",
+							"pm.expect(body[2].location.toString()).equal(secondSource.location.toString());\r",
+							"pm.expect(body[2].requestModeration).equal(secondSource.requestModeration);\r",
+							"pm.expect(body[2].rating).equal(secondSource.rating);\r",
+							"\r",
+							"pm.expect(body[3].id).equal(thirdSource.id);\r",
+							"pm.expect(body[3].title).equal(thirdSource.title);\r",
+							"pm.expect(body[3].annotation).equal(thirdSource.annotation);\r",
+							"pm.expect(body[3].category.toString()).equal(thirdSource.category.toString());\r",
+							"pm.expect(body[3].paid).equal(thirdSource.paid);\r",
+							"pm.expect(body[3].eventDate).equal(thirdSource.eventDate);\r",
+							"pm.expect(body[3].initiator.toString()).equal(thirdSource.initiator.toString());\r",
+							"pm.expect(body[3].description).equal(thirdSource.description);\r",
+							"pm.expect(body[3].participantLimit).equal(thirdSource.participantLimit);\r",
+							"pm.expect(body[3].state).equal(thirdSource.state);\r",
+							"pm.expect(body[3].createdOn).equal(thirdSource.createdOn);\r",
+							"pm.expect(body[3].location.toString()).equal(thirdSource.location.toString());\r",
+							"pm.expect(body[3].requestModeration).equal(thirdSource.requestModeration);\r",
+							"pm.expect(body[3].rating).equal(thirdSource.rating);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/events?rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&onlyAvailable=false&sort=EVENT_INITIATOR_RATING&from=0&size=1000&categories={{categoryId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"events"
+					],
+					"query": [
+						{
+							"key": "rangeStart",
+							"value": "2022-01-06%2013%3A30%3A38"
+						},
+						{
+							"key": "rangeEnd",
+							"value": "2097-09-06%2013%3A30%3A38"
+						},
+						{
+							"key": "onlyAvailable",
+							"value": "false"
+						},
+						{
+							"key": "sort",
+							"value": "EVENT_INITIATOR_RATING"
+						},
+						{
+							"key": "from",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "1000"
+						},
+						{
+							"key": "categories",
+							"value": "{{categoryId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"API = class {",
+					"    constructor(postman, verbose = false, baseUrl = \"http://localhost:8080\") {",
+					"        this.baseUrl = baseUrl;",
+					"        this.pm = postman;",
+					"        this._verbose = verbose;",
+					"    }",
+					"",
+					"    async addUser(user, verbose=null) {",
+					"        return this.post(\"/admin/users\", null, user, \"Ошибка при добавлении нового пользователя: \", verbose);",
+					"    }",
+					"",
+					"    async addCategory(category, verbose=null) {",
+					"        return this.post(\"/admin/categories\", null, category, \"Ошибка при добавлении новой категории: \", verbose);",
+					"    }",
+					"",
+					"    async addEvent(userId, event, verbose=null) {",
+					"        return this.post(\"/users/\" + userId + \"/events\", null, event, \"Ошибка при добавлении нового события: \", verbose);",
+					"    }",
+					"",
+					"    async addCompilation(compilation, verbose=null) {",
+					"        return this.post(\"/admin/compilations\", null, compilation, \"Ошибка при добавлении новой подборки: \", verbose);",
+					"    }",
+					"",
+					"    async publishParticipationRequest(eventId, userId, verbose=null) {",
+					"        return this.post('/users/' + userId + '/requests?eventId=' + eventId, null, null, \"Ошибка при добавлении нового запроса на участие в событии\", verbose);",
+					"    }",
+					"",
+					"    async publishEvent(eventId, verbose=null) {",
+					"        return this.patch('/admin/events/' + eventId, null, {stateAction: \"PUBLISH_EVENT\"}, \"Ошибка при публикации события\", verbose);",
+					"    }",
+					"    ",
+					"    async rejectEvent(eventId, verbose=null) {",
+					"        return this.patch('/admin/events/' + eventId, null, {stateAction: \"REJECT_EVENT\"}, \"Ошибка при отмене события\", verbose);",
+					"    }",
+					"",
+					"    async acceptParticipationRequest(eventId, userId, reqId, verbose=null) {",
+					"        return this.patch('/users/' + userId + '/events/' + eventId + '/requests/', null, {requestIds:[reqId], status: \"CONFIRMED\"}, \"Ошибка при принятии заявки на участие в событии\", verbose);",
+					"    }",
+					"",
+					"    async likeEvent(eventId, userId, verbose=null) {",
+					"        return this.patch('/events/' + eventId + '/like', { 'X-User-Id' : String(userId) }, null, \"Ошибка при лайке события\", verbose);",
+					"    }",
+					"",
+					"    async dislikeEvent(eventId, userId, verbose=null) {",
+					"        return this.patch('/events/' + eventId + '/dislike', { 'X-User-Id' : String(userId) }, null, \"Ошибка при дизлайке события\", verbose);",
+					"    }",
+					"",
+					"    async findCategory(catId, verbose=null) {",
+					"        return this.get('/categories/' + catId, null, null, \"Ошибка при поиске категории по id\", verbose);",
+					"    }",
+					"",
+					"    async findCompilation(compId, verbose=null) {",
+					"        return this.get('/compilations/' + compId, null, null, \"Ошибка при поиске подборки по id\", verbose);",
+					"    }",
+					"",
+					"    async findEvent(eventId, verbose=null) {",
+					"        return this.get('/events/' + eventId, null, null, \"Ошибка при поиске события по id\", verbose);",
+					"    }",
+					"",
+					"    async findUser(userId, verbose=null) {",
+					"        return this.get('/admin/users?ids=' + userId, null, null, \"Ошибка при поиске пользователя по id\", verbose);",
+					"    }",
+					"",
+					"    async post(path, headers, body, errorText = \"Ошибка при выполнении post-запроса: \", verbose=null) {",
+					"        return this.sendRequest(\"POST\", path, headers, body, errorText, verbose);",
+					"    }",
+					"",
+					"    async patch(path, headers, body = null, errorText = \"Ошибка при выполнении patch-запроса: \", verbose=null) {",
+					"        return this.sendRequest(\"PATCH\", path, headers, body, errorText, verbose);",
+					"    }",
+					"",
+					"    async get(path, headers, body = null, errorText = \"Ошибка при выполнении get-запроса: \", verbose=null) {",
+					"        return this.sendRequest(\"GET\", path, headers, body, errorText, verbose);",
+					"    }",
+					"",
+					"    async sendRequest(method, path, headers, body=null, errorText = \"Ошибка при выполнении запроса: \", verbose=null) {",
+					"        return new Promise((resolve, reject) => {",
+					"            verbose = verbose == null ? this._verbose : verbose;",
+					"",
+					"            const request = {",
+					"                url: this.baseUrl + path,",
+					"                method: method,",
+					"                body: body == null ? \"\" : JSON.stringify(body),",
+					"                header: { ...headers, \"Content-Type\": \"application/json\" },",
+					"            };",
+					"",
+					"            if(verbose) {",
+					"                console.log(\"Отправляю запрос: \", request);",
+					"            }",
+					"",
+					"            try {",
+					"                this.pm.sendRequest(request, (error, response) => {",
+					"                    if(error || (response.code >= 400 && response.code <= 599)) {",
+					"                        let err = error ? error : JSON.stringify(response.json());",
+					"                        console.error(\"При выполнении запроса к серверу возникла ошика.\\n\", err,",
+					"                             \"\\nДля отладки проблемы повторите такой же запрос к вашей программе \" + ",
+					"                             \"на локальном компьютере. Данные запроса:\\n\", JSON.stringify(request));",
+					"",
+					"                        reject(new Error(errorText + err));",
+					"                    }",
+					"",
+					"                    if(verbose) {",
+					"                        console.log(\"Результат обработки запроса: код состояния - \", response.code, \", тело: \", response.json());",
+					"                    }",
+					"",
+					"                    resolve(response.json());",
+					"                });",
+					"            } catch(err) {",
+					"                if(verbose) {",
+					"                    console.error(errorText, err);",
+					"                }",
+					"                return Promise.reject(err);",
+					"            }",
+					"        });",
+					"    }",
+					"};",
+					"",
+					"RandomUtils = class {",
+					"    constructor() {}",
+					"",
+					"    getUser() {",
+					"        return {",
+					"            name: pm.variables.replaceIn('{{$randomFullName}}'),",
+					"            email: pm.variables.replaceIn('{{$randomEmail}}')",
+					"        };",
+					"    }",
+					"",
+					"    getCategory() {",
+					"        return {",
+					"            name: pm.variables.replaceIn('{{$randomWord}}') + Math.floor(Math.random() * 100).toString()",
+					"        };",
+					"    }",
+					"",
+					"    getEvent(categoryId) {",
+					"        return {",
+					"            annotation: pm.variables.replaceIn('{{$randomLoremParagraph}}'),",
+					"            category: categoryId,",
+					"            description: pm.variables.replaceIn('{{$randomLoremParagraphs}}'),",
+					"            eventDate: this.getFutureDateTime(),",
+					"            location: {",
+					"                lat: parseFloat(pm.variables.replaceIn('{{$randomLatitude}}')),",
+					"                lon: parseFloat(pm.variables.replaceIn('{{$randomLongitude}}')),",
+					"            },",
+					"            paid: pm.variables.replaceIn('{{$randomBoolean}}'),",
+					"            participantLimit: pm.variables.replaceIn('{{$randomInt}}'),",
+					"            requestModeration: pm.variables.replaceIn('{{$randomBoolean}}'),",
+					"            title: pm.variables.replaceIn('{{$randomLoremSentence}}'),",
+					"        }",
+					"    }",
+					"",
+					"    getCompilation(...eventIds) {",
+					"        return {",
+					"            title: pm.variables.replaceIn('{{$randomLoremSentence}}').slice(0, 50),",
+					"            pinned: pm.variables.replaceIn('{{$randomBoolean}}'),",
+					"            events: eventIds",
+					"        };",
+					"    }",
+					"",
+					"",
+					"    getFutureDateTime(hourShift = 5, minuteShift=0, yearShift=0) {",
+					"        let moment = require('moment');",
+					"",
+					"        let m = moment();",
+					"        m.add(hourShift, 'hour');",
+					"        m.add(minuteShift, 'minute');",
+					"        m.add(yearShift, 'year');",
+					"",
+					"        return m.format('YYYY-MM-DD HH:mm:ss');",
+					"    }",
+					"",
+					"    getWord(length = 1) {",
+					"        let result = '';",
+					"        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+					"        const charactersLength = characters.length;",
+					"        let counter = 0;",
+					"        while (counter < length) {",
+					"            result += characters.charAt(Math.floor(Math.random() * charactersLength));",
+					"            counter += 1;",
+					"        }",
+					"        return result;",
+					"    }",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "eventId",
+			"value": ""
+		},
+		{
+			"key": "response",
+			"value": ""
+		},
+		{
+			"key": "firstResponse",
+			"value": ""
+		},
+		{
+			"key": "secondResponse",
+			"value": ""
+		},
+		{
+			"key": "thirdResponse",
+			"value": ""
+		},
+		{
+			"key": "fourthResponse",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		}
+	]
+}

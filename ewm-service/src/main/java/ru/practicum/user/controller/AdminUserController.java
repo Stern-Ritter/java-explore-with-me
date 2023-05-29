@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.user.dto.CreateUserDto;
 import ru.practicum.user.dto.UserDto;
+import ru.practicum.user.dto.UserFullDto;
 import ru.practicum.user.service.UserService;
 
 import javax.validation.Valid;
@@ -27,9 +28,9 @@ public class AdminUserController {
     private final UserService userService;
 
     @GetMapping
-    public List<UserDto> getAll(@RequestParam(name = "ids", required = false) List<Long> ids,
-                                @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                @RequestParam(name = "size", defaultValue = "10") Integer size) {
+    public List<UserFullDto> getAll(@RequestParam(name = "ids", required = false) List<Long> ids,
+                                    @RequestParam(name = "from", defaultValue = "0") Integer from,
+                                    @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return userService.getAll(ids, from, size);
     }
 

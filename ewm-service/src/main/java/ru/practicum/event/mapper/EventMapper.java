@@ -73,7 +73,7 @@ public class EventMapper {
         eventDto.setCreatedOn(event.getCreatedOn());
         eventDto.setDescription(event.getDescription());
         eventDto.setEventDate(event.getEventDate());
-        eventDto.setInitiator(event.getInitiator() == null ? null : UserMapper.toUserShortDto(event.getInitiator()));
+        eventDto.setInitiator(event.getInitiator() == null ? null : UserMapper.toUserFullDto(event.getInitiator()));
         eventDto.setLocation(event.getLocation() == null ? null : LocationMapper.toLocationDto(event.getLocation()));
         eventDto.setPaid(event.getPaid());
         eventDto.setParticipantLimit(event.getParticipantLimit());
@@ -81,6 +81,7 @@ public class EventMapper {
         eventDto.setRequestModeration(event.getRequestModeration());
         eventDto.setState(event.getState());
         eventDto.setTitle(event.getTitle());
+        eventDto.setRating(event.getRating());
         return eventDto;
     }
 
@@ -93,7 +94,7 @@ public class EventMapper {
         eventDto.setCreatedOn(event.getCreatedOn());
         eventDto.setDescription(event.getDescription());
         eventDto.setEventDate(event.getEventDate());
-        eventDto.setInitiator(event.getInitiator() == null ? null : UserMapper.toUserShortDto(event.getInitiator()));
+        eventDto.setInitiator(event.getInitiator() == null ? null : UserMapper.toUserFullDto(event.getInitiator()));
         eventDto.setLocation(event.getLocation() == null ? null : LocationMapper.toLocationDto(event.getLocation()));
         eventDto.setPaid(event.getPaid());
         eventDto.setParticipantLimit(event.getParticipantLimit());
@@ -101,6 +102,7 @@ public class EventMapper {
         eventDto.setRequestModeration(event.getRequestModeration());
         eventDto.setState(event.getState());
         eventDto.setTitle(event.getTitle());
+        eventDto.setRating(event.getLikes().size() - event.getDislikes().size());
         return eventDto;
     }
 

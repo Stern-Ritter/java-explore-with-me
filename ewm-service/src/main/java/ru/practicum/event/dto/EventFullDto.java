@@ -9,7 +9,7 @@ import lombok.ToString;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.model.EventState;
 import ru.practicum.location.dto.LocationDto;
-import ru.practicum.user.dto.UserShortDto;
+import ru.practicum.user.dto.UserFullDto;
 
 import java.time.LocalDateTime;
 
@@ -35,7 +35,7 @@ public class EventFullDto implements EventDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    private UserShortDto initiator;
+    private UserFullDto initiator;
 
     private LocationDto location;
 
@@ -51,6 +51,8 @@ public class EventFullDto implements EventDto {
     private EventState state;
 
     private String title;
+
+    private Integer rating;
 
     private Long views;
 }

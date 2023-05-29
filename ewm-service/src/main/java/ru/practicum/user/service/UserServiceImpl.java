@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.user.dto.CreateUserDto;
 import ru.practicum.user.dto.UserDto;
+import ru.practicum.user.dto.UserFullDto;
 import ru.practicum.user.mapper.UserMapper;
 import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
@@ -24,15 +25,15 @@ import static ru.practicum.utils.Utils.calculateFirstPageNumber;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final Sort.TypedSort<UserDto> userSort = Sort.sort(UserDto.class);
+    private final Sort.TypedSort<UserFullDto> userSort = Sort.sort(UserFullDto.class);
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
-    public List<UserDto> getAll(List<Long> ids, Integer offset, Integer limit) {
-        Sort sortByIdAsc = userSort.by(UserDto::getId).ascending();
+    public List<UserFullDto> getAll(List<Long> ids, Integer offset, Integer limit) {
+        Sort sortByIdAsc = userSort.by(UserFullDto::getId).ascending();
         Pageable pageable = PageRequest.of(calculateFirstPageNumber(offset, limit), limit, sortByIdAsc);
         return userRepository.findUsers(ids, pageable).stream()
-                .map(UserMapper::toUserDto)
+                .map(UserMapper::toUserFullDto)
                 .collect(Collectors.toList());
     }
 
