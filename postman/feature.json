@@ -44,10 +44,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/like",
+					"raw": "http://localhost:8080/events/:eventId/like",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -101,10 +103,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"raw": "http://localhost:8080/events/:eventId/dislike",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -191,10 +195,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/like",
+					"raw": "http://localhost:8080/events/:eventId/like",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -281,10 +287,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"raw": "http://localhost:8080/events/:eventId/dislike",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -376,10 +384,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/like",
+					"raw": "http://localhost:8080/events/:eventId/like",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -471,10 +481,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"raw": "http://localhost:8080/events/:eventId/dislike",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -572,10 +584,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/like",
+					"raw": "http://localhost:8080/events/:eventId/like",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -673,10 +687,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"raw": "http://localhost:8080/events/:eventId/dislike",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -798,10 +814,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/like",
+					"raw": "http://localhost:8080/events/:eventId/like",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -923,10 +941,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"raw": "http://localhost:8080/events/:eventId/dislike",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -1055,10 +1075,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/like",
+					"raw": "http://localhost:8080/events/:eventId/like",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -1187,10 +1209,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"raw": "http://localhost:8080/events/:eventId/dislike",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -1290,10 +1314,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/like",
+					"raw": "http://localhost:8080/events/:eventId/like",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -1393,10 +1419,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events/:eventId/dislike",
+					"raw": "http://localhost:8080/events/:eventId/dislike",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events",
 						":eventId",
@@ -1533,10 +1561,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/events/:eventId",
+					"raw": "http://localhost:8080/users/:userId/events/:eventId",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"users",
 						":userId",
@@ -1678,10 +1708,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/admin/users?ids={{userId}}",
+					"raw": "http://localhost:8080/admin/users?ids={{userId}}",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"admin",
 						"users"
@@ -1921,10 +1953,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events?rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&onlyAvailable=false&sort=EVENT_RATING&from=0&size=1000&categories={{categoryId}}",
+					"raw": "http://localhost:8080/events?rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&onlyAvailable=false&sort=EVENT_RATING&from=0&size=1000&categories={{categoryId}}",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events"
 					],
@@ -2188,10 +2222,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/events?rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&onlyAvailable=false&sort=EVENT_INITIATOR_RATING&from=0&size=1000&categories={{categoryId}}",
+					"raw": "http://localhost:8080/events?rangeStart=2022-01-06%2013%3A30%3A38&rangeEnd=2097-09-06%2013%3A30%3A38&onlyAvailable=false&sort=EVENT_INITIATOR_RATING&from=0&size=1000&categories={{categoryId}}",
+					"protocol": "http",
 					"host": [
-						"{{baseUrl}}"
+						"localhost"
 					],
+					"port": "8080",
 					"path": [
 						"events"
 					],
