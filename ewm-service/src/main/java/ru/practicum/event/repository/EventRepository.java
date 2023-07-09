@@ -24,7 +24,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND (:categories IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
             "AND (CAST(:start AS timestamp) IS NULL OR e.eventDate >= :start) " +
-            "AND (CAST(:end AS timestamp) IS NULL OR e.eventDate <= :end)")
+            "AND (CAST(:end AS timestamp) IS NULL OR e.eventDate <= :end) " +
+            "ORDER BY e.id"
+    )
     List<EventFullView> findAllWithFilters(@Param("text") String text,
                                            @Param("categories") List<Long> categories,
                                            @Param("paid") Boolean paid,
@@ -36,7 +38,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND ((:states) IS NULL OR e.state IN (:states)) " +
             "AND (:categories IS NULL OR e.category.id IN :categories) " +
             "AND (CAST(:start AS timestamp) IS NULL OR e.eventDate >= :start) " +
-            "AND (CAST(:end AS timestamp) IS NULL OR e.eventDate <= :end)"
+            "AND (CAST(:end AS timestamp) IS NULL OR e.eventDate <= :end) " +
+            "ORDER BY e.id"
     )
     List<EventFullView> findAllWithAdminFilters(@Param("users") List<Long> users,
                                                 @Param("states") List<EventState> states,

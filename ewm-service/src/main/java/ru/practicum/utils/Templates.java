@@ -43,6 +43,10 @@ public class Templates {
     public static final String EVENT_CANCEL_STATE_VALIDATION_EXCEPTION = "Cannot cancel the event because it's not in the right state: %s";
     public static final String EVENT_REQUEST_PARTICIPANT_LIMIT_EXCEPTION = "The participant limit has been reached";
     public static final String EVENT_REQUEST_CONFIRMATION_INCORRECT_STATUS_EXCEPTION = "Cannot confirm the event request because it's not in the right state";
+    public static final String EVENT_LIKED_BY_USER_MORE_THAN_ONCE_EXCEPTION = "Event can be liked by user only once";
+    public static final String EVENT_DISLIKED_BY_USER_MORE_THAN_ONCE_EXCEPTION = "Event can be disliked by user only once";
+    public static final String EVENT_LIKED_BY_NON_PARTICIPANT_EXCEPTION = "User who is not a initiator or a participant of the event cannot like this event";
+    public static final String EVENT_DISLIKED_BY_NON_PARTICIPANT_EXCEPTION = "User who is not a initiator or a participant of the event cannot dislike this event";
 
     public static final String REQUEST_NOT_EXISTS_TEMPLATE = "Request with id=%s was not found";
     public static final String REQUEST_INCORRECT_REQUESTER_EXCEPTION = "The initiator of the event cannot add a request to participate in his event";

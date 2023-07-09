@@ -49,6 +49,22 @@ CREATE TABLE IF NOT EXISTS events (
     CONSTRAINT events_to_locations_fk FOREIGN KEY (location_id) REFERENCES locations (id)
 );
 
+CREATE TABLE IF NOT EXISTS events_likes (
+    event_id BIGINT,
+    user_id BIGINT,
+    CONSTRAINT pk_events_likes PRIMARY KEY (event_id, user_id),
+    CONSTRAINT events_likes_to_events_fk FOREIGN KEY (event_id) REFERENCES events(id),
+    CONSTRAINT events_likes_to_users_fk FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS events_dislikes (
+    event_id BIGINT,
+    user_id BIGINT,
+    CONSTRAINT pk_events_dislikes PRIMARY KEY (event_id, user_id),
+    CONSTRAINT events_likes_to_events_fk FOREIGN KEY (event_id) REFERENCES events(id),
+    CONSTRAINT events_likes_to_users_fk FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 CREATE TABLE IF NOT EXISTS requests (
     id BIGSERIAL,
     creation_date TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),

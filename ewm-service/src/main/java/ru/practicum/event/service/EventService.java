@@ -39,4 +39,8 @@ public interface EventService {
 
     EventRequestStatusUpdateResultDto updateEventRequestsByEventIdAndUserId(
             EventRequestStatusUpdateRequestDto eventRequestStatusUpdateRequestDto, Long userId, Long eventId);
+
+    EventFullDto like(Long userId, Long eventId);
+
+    EventFullDto dislike(Long userId, Long eventId);
 }

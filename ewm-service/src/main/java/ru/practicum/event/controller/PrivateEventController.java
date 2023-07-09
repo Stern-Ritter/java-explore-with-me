@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.event.dto.CreateEventDto;
 import ru.practicum.event.dto.EventFullDto;
+import ru.practicum.event.dto.EventRequestStatusUpdateRequestDto;
+import ru.practicum.event.dto.EventRequestStatusUpdateResultDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.UpdateEventUserRequest;
 import ru.practicum.event.service.EventService;
 import ru.practicum.request.dto.RequestDto;
-import ru.practicum.event.dto.EventRequestStatusUpdateRequestDto;
-import ru.practicum.event.dto.EventRequestStatusUpdateResultDto;
 
 import javax.validation.Valid;
 import java.util.List;
